@@ -1,0 +1,83 @@
+## .gitignore para projetos C# / .NET / Visual Studio
+
+# Pastas de build
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ll]og/
+[Ll]ogs/
+
+# Arquivos de usuário e configuração local do Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+
+# Resultados de build e pacotes
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# Arquivos de teste e cobertura
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# Publicação / deploy
+[Pp]ublish/
+*.pubxml
+*.pubxml.user
+*.azurePubxml
+*.publishproj
+
+# ReSharper / Rider
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.idea/
+
+# Arquivos temporários do Windows/OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Arquivos de ambiente / segredos (ajuste conforme seu projeto)
+*.env
+appsettings.Development.json
+appsettings.*.local.json
+
+# ClickOnce
+publish/
+
+# Arquivos de banco de dados local (SQL Server LocalDB, etc)
+*.mdf
+*.ldf
+*.ndf
+
+# Node (caso tenha frontend Vue/Vuetify integrado no mesmo repo)
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de backup
+*.bak
+*.tmp
+*~
