@@ -7,39 +7,43 @@ public class Migration_001_CreatePessoas : Migration
 {
     public override void Up()
     {
-        Create.Table("PESSOAS")
-            .WithColumn("ID")
+        Create.Table("Pessoas")
+            .WithColumn("id")
                 .AsInt32()
                 .PrimaryKey()
                 .Identity()
 
-            .WithColumn("NOME")
+            .WithColumn("nome")
                 .AsString(150)
                 .NotNullable()
 
-            .WithColumn("CPF")
-                .AsString(11)
+            .WithColumn("cpfCnpj")
+                .AsString(30)
                 .Nullable()
 
-            .WithColumn("DATA_NASCIMENTO")
+            .WithColumn("nascimento")
                 .AsDateTime()
                 .Nullable()
 
-            .WithColumn("EMAIL")
-                .AsString(150)
+            .WithColumn("email")
+                .AsString(100)
                 .Nullable()
 
-            .WithColumn("TELEFONE")
+            .WithColumn("genero")
                 .AsString(20)
                 .Nullable()
 
-            .WithColumn("DATA_CADASTRO")
+            .WithColumn("cadastro")
                 .AsDateTime()
-                .NotNullable();
+                .NotNullable()
+
+            .WithColumn("atualizacao")
+                .AsDateTime()
+                .Nullable();
     }
 
     public override void Down()
     {
-        Delete.Table("PESSOAS");
+        Delete.Table("Pessoas");
     }
 }

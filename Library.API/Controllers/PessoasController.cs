@@ -1,7 +1,6 @@
-﻿using Library.Domain.DTOs.Pessoas;
-using Library.Domain.Services;
-using Library.Infrastructure.Services;
+﻿using Library.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using Library.Domain.DTOs.Pessoas;
 
 namespace Library.API.Controllers;
 
@@ -30,17 +29,15 @@ public class PessoasController : ControllerBase
         var pessoa = await _service.ObterPorIdAsync(id);
 
         if (pessoa == null)
-            return NotFound(new
-            {
-                mensagem = "Pessoa não encontrada."
-            });
+        {
+            return NotFound(new { mensagem = "Pessoa não encontrada." });
+        }
 
         return Ok(pessoa);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Criar(
-        PostRequest request)
+    public async Task<IActionResult> Criar(PostRequest request)
     {
         try
         {
@@ -48,44 +45,31 @@ public class PessoasController : ControllerBase
 
             var pessoa = await _service.ObterPorIdAsync(id);
 
-            return CreatedAtAction(
-                nameof(ObterPorId),
-                new { id },
-                pessoa);
+            return CreatedAtAction(nameof(ObterPorId), new { id }, pessoa);
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new
-            {
-                mensagem = ex.Message
-            });
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Atualizar(
-        int id,
-        PutRequest request)
+    public async Task<IActionResult> Atualizar(int id, PutRequest request)
     {
         try
         {
-            var atualizado =
-                await _service.AtualizarAsync(id, request);
+            var atualizado = await _service.AtualizarAsync(id, request);
 
             if (!atualizado)
-                return NotFound(new
-                {
-                    mensagem = "Pessoa não encontrada."
-                });
-
+            {
+                return NotFound(new { mensagem = "Pessoa não encontrada." });
+            }
+                
             return NoContent();
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new
-            {
-                mensagem = ex.Message
-            });
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
@@ -95,11 +79,10 @@ public class PessoasController : ControllerBase
         var excluido = await _service.ExcluirAsync(id);
 
         if (!excluido)
-            return NotFound(new
-            {
-                mensagem = "Pessoa não encontrada."
-            });
-
+        {
+            return NotFound(new { mensagem = "Pessoa não encontrada." });
+        }
+            
         return NoContent();
     }
 }

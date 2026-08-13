@@ -20,17 +20,16 @@ public class PessoasRepository : IPessoasRepository
 
         const string sql = @"
             SELECT
-                ID                  AS Id
-                , NOME              AS Nome
-                , CPF               AS CPF
-                , DATA_NASCIMENTO   AS DataNascimento
-                , EMAIL             AS Email
-                , TELEFONE          AS Telefone
-                , DATA_CADASTRO     AS DataCadastro
+                id                  AS 'ID'
+                , nome              AS 'Nome'
+                , cpfCnpj           AS 'CPF/CNPJ'
+                , nascimento        AS 'Dt. Nascimento'
+                , email             AS 'E-mail'
+                , genero            AS 'Gênero'
             FROM 
-                PESSOAS
+                Pessoas
             ORDER BY 
-                NOME
+                nome
          ";
 
         return await connection.QueryAsync<Pessoas>(sql);
@@ -42,15 +41,16 @@ public class PessoasRepository : IPessoasRepository
 
         const string sql = @"
             SELECT
-                ID AS Id,
-                NOME AS Nome,
-                CPF AS CPF,
-                DATA_NASCIMENTO AS DataNascimento,
-                EMAIL AS Email,
-                TELEFONE AS Telefone,
-                DATA_CADASTRO AS DataCadastro
-            FROM PESSOAS
-            WHERE ID = @Id
+                id                  AS 'ID'
+                , nome              AS 'Nome'
+                , cpfCnpj           AS 'CPF/CNPJ'
+                , nascimento        AS 'Dt. Nascimento'
+                , email             AS 'E-mail'
+                , genero            AS 'Gênero'
+            FROM 
+                Pessoas
+            WHERE 
+                id = @id
         ";
 
         return await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { Id = id });
@@ -61,23 +61,23 @@ public class PessoasRepository : IPessoasRepository
         using var connection = _database.CreateConnection();
 
         const string sql = @"
-            INSERT INTO PESSOAS
+            INSERT INTO Pessoas
             (
-                NOME,
-                CPF,
-                DATA_NASCIMENTO,
-                EMAIL,
-                TELEFONE,
-                DATA_CADASTRO
+                nome,
+                cpfCnpj,
+                nascimento,
+                email,
+                genero,
+                cadastro
             )
             VALUES
             (
-                @Nome,
-                @CPF,
-                @DataNascimento,
-                @Email,
-                @Telefone,
-                @DataCadastro
+                @nome,
+                @cpfCnpj,
+                @nascimento,
+                @email,
+                @genero,
+                @cadastro
             );
 
             SELECT CAST(SCOPE_IDENTITY() AS INT);
@@ -92,15 +92,16 @@ public class PessoasRepository : IPessoasRepository
 
         const string sql = @"
             UPDATE 
-                PESSOAS
+                Pessoas
             SET
-                NOME = @Nome,
-                CPF = @CPF,
-                DATA_NASCIMENTO = @DataNascimento,
-                EMAIL = @Email,
-                TELEFONE = @Telefone
+                nome = @nome,
+                cpfCnpj = @cpfCnpj,
+                nascimento = @nascimento,
+                email = @email,
+                genero = @genero,
+                atualizacao = @atualizacao
             WHERE 
-                ID = @Id
+                id = @id
         ";
 
         var linhas = await connection.ExecuteAsync(sql, pessoa);
@@ -113,11 +114,11 @@ public class PessoasRepository : IPessoasRepository
         using var connection = _database.CreateConnection();
 
         const string sql = @"
-            DELETE FROM PESSOAS
-            WHERE ID = @Id
+            DELETE FROM Pessoas
+            WHERE id = @id
         ";
 
-        var linhas = await connection.ExecuteAsync(sql, new { Id = id });
+        var linhas = await connection.ExecuteAsync(sql, new { id = id });
 
         return linhas > 0;
     }

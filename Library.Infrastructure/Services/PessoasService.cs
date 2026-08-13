@@ -1,8 +1,7 @@
-﻿using Library.Domain.DTOs.Pessoas;
+﻿using Library.Domain.Services;
 using Library.Domain.Entities;
 using Library.Domain.Interfaces;
-using Library.Domain.Services;
-using Library.Infrastructure.Repositories;
+using Library.Domain.DTOs.Pessoas;
 
 namespace Library.Infrastructure.Services
 {
@@ -23,23 +22,27 @@ namespace Library.Infrastructure.Services
         public async Task<Pessoas?> ObterPorIdAsync(int id)
         {
             if (id <= 0)
+            {
                 return null;
+            }
 
             return await _repository.ObterPorIdAsync(id);
         }
 
         public async Task<int> CriarAsync(PostRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Nome))
+            if (string.IsNullOrWhiteSpace(request.nome)) 
+            { 
                 throw new ArgumentException("O nome da pessoa é obrigatório.");
+            }
 
             var pessoa = new Pessoas() {
-                Nome = request.Nome.Trim(),
-                CPF = request.CPF,
-                DataNascimento = request.DataNascimento,
-                Email = request.Email,
-                Telefone = request.Telefone,
-                DataCadastro = DateTime.Now
+                nome = request.nome.Trim(),
+                cpfCnpj = request.cpfCnpj,
+                nascimento = request.nascimento,
+                email = request.email,
+                genero = request.genero,
+                cadastro = DateTime.Now
             };
 
             return await _repository.CriarAsync(pessoa);
@@ -50,18 +53,23 @@ namespace Library.Infrastructure.Services
             PutRequest request)
         {
             if (id <= 0)
+            {
                 throw new ArgumentException("ID inválido.");
+            }
 
-            if (string.IsNullOrWhiteSpace(request.Nome))
+            if (string.IsNullOrWhiteSpace(request.nome))
+            {
                 throw new ArgumentException("O nome da pessoa é obrigatório.");
-
+            }
+                
             var pessoa = new Pessoas() {
-                Id = id,
-                Nome = request.Nome.Trim(),
-                CPF = request.CPF,
-                DataNascimento = request.DataNascimento,
-                Email = request.Email,
-                Telefone = request.Telefone
+                id = id,
+                nome = request.nome.Trim(),
+                cpfCnpj = request.cpfCnpj,
+                nascimento = request.nascimento,
+                email = request.email,
+                genero = request.genero,
+                atualizacao = DateTime.Now
             };
 
             return await _repository.AtualizarAsync(pessoa);
@@ -70,7 +78,9 @@ namespace Library.Infrastructure.Services
         public async Task<bool> ExcluirAsync(int id)
         {
             if (id <= 0)
+            {
                 return false;
+            }
 
             return await _repository.ExcluirAsync(id);
         }

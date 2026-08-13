@@ -2,12 +2,13 @@
 {
     public class Pessoas
     {
-        public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string CPF { get; set; } = string.Empty;
-        public DateTime DataNascimento { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string Telefone { get; set; } = string.Empty;
-        public DateTime DataCadastro { get; set; }
+        public int id { get; set; }
+        public string nome { get; set; } = string.Empty;
+        public string? cpfCnpj { get; set; }
+        public DateTime? nascimento { get; set; }
+        public string? email { get; set; }
+        public string? genero { get; set; }
+        public DateTime cadastro { get; set; }
+        public DateTime? atualizacao { get; set; }
     }
 }
