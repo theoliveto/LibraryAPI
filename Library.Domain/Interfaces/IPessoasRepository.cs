@@ -1,9 +1,7 @@
 ﻿using Library.Domain.Entities;
 
-namespace Library.Domain.Interfaces
-{
-    public interface IPessoasRepository
-    {
+namespace Library.Domain.Interfaces {
+    public interface IPessoasRepository {
         Task<IEnumerable<Pessoas>> ObterTodosAsync();
 
         Task<Pessoas?> ObterPorIdAsync(int id);

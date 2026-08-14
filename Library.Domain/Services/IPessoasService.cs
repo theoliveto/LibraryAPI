@@ -1,10 +1,8 @@
 ﻿using Library.Domain.DTOs.Pessoas;
 using Library.Domain.Entities;
 
-namespace Library.Domain.Services
-{
-    public interface IPessoasService
-    {
+namespace Library.Domain.Services {
+    public interface IPessoasService {
         Task<IEnumerable<Pessoas>> ObterTodosAsync();
 
         Task<Pessoas?> ObterPorIdAsync(int id);

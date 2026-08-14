@@ -6,30 +6,25 @@ namespace Library.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PessoasController : ControllerBase
-{
+public class PessoasController : ControllerBase {
     private readonly IPessoasService _service;
 
-    public PessoasController(IPessoasService service)
-    {
+    public PessoasController(IPessoasService service) {
         _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObterTodos()
-    {
+    public async Task<IActionResult> ObterTodos() {
         var pessoas = await _service.ObterTodosAsync();
 
         return Ok(pessoas);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> ObterPorId(int id)
-    {
+    public async Task<IActionResult> ObterPorId(int id) {
         var pessoa = await _service.ObterPorIdAsync(id);
 
-        if (pessoa == null)
-        {
+        if (pessoa == null) {
             return NotFound(new { mensagem = "Pessoa não encontrada." });
         }
 
@@ -37,52 +32,43 @@ public class PessoasController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Criar(PostRequest request)
-    {
-        try
-        {
+    public async Task<IActionResult> Criar(PostRequest request) {
+        try {
             var id = await _service.CriarAsync(request);
 
             var pessoa = await _service.ObterPorIdAsync(id);
 
             return CreatedAtAction(nameof(ObterPorId), new { id }, pessoa);
-        }
-        catch (ArgumentException ex)
-        {
+
+        } catch(ArgumentException ex) {
             return BadRequest(new { mensagem = ex.Message });
         }
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Atualizar(int id, PutRequest request)
-    {
-        try
-        {
-            var atualizado = await _service.AtualizarAsync(id, request);
+    public async Task<IActionResult> Atualizar(int id,PutRequest request) {
+        try {
+            var atualizado = await _service.AtualizarAsync(id,request);
 
-            if (!atualizado)
-            {
+            if (!atualizado) {
                 return NotFound(new { mensagem = "Pessoa não encontrada." });
             }
-                
+
             return NoContent();
-        }
-        catch (ArgumentException ex)
-        {
+
+        } catch (ArgumentException ex) {
             return BadRequest(new { mensagem = ex.Message });
         }
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Excluir(int id)
-    {
+    public async Task<IActionResult> Excluir(int id) {
         var excluido = await _service.ExcluirAsync(id);
 
-        if (!excluido)
-        {
+        if (!excluido) {
             return NotFound(new { mensagem = "Pessoa não encontrada." });
         }
-            
+
         return NoContent();
     }
 }

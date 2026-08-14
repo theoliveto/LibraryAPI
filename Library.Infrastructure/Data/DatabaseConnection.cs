@@ -1,19 +1,15 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace Library.Infrastructure.Data
-{
-    public class DatabaseConnection
-    {
+namespace Library.Infrastructure.Data {
+    public class DatabaseConnection {
         private readonly string _connectionString;
 
-        public DatabaseConnection(string connectionString)
-        {
+        public DatabaseConnection(string connectionString) {
             _connectionString = connectionString;
         }
 
-        public IDbConnection CreateConnection()
-        {
+        public IDbConnection CreateConnection() {
             return new SqlConnection(_connectionString);
         }
     }
