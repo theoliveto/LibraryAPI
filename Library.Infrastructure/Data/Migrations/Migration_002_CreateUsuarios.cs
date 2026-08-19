@@ -39,10 +39,6 @@ public class Migration_002_CreateUsuarios : Migration {
                 .AsBoolean()
                 .NotNullable()
 
-            .WithColumn("DS_OBSERVACOES")
-                .AsString(500)
-                .Nullable()
-
             .WithColumn("DT_CADASTRO")
                 .AsDateTime()
                 .NotNullable()

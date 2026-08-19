@@ -1,15 +1,15 @@
 ﻿using Library.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Library.Domain.DTOs.Pessoas;
+using Library.Domain.DTOs.Usuarios;
 
 namespace Library.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PessoasController : ControllerBase {
-    private readonly IPessoasService _service;
+public class UsuariosController : ControllerBase {
+    private readonly IUsuariosService _service;
 
-    public PessoasController(IPessoasService service) {
+    public UsuariosController(IUsuariosService service) {
         _service = service;
     }
 
