@@ -82,8 +82,7 @@ public class PessoasRepository : IPessoasRepository {
         const string sql = @"
             INSERT INTO TBL_PESSOAS
             (
-                CD_PESSOA 	
-                , DS_PESSOA 	
+                DS_PESSOA 	
                 , NR_CPF 		
                 , DS_EMAIL 	
                 , NR_TELEFONE 
@@ -103,8 +102,7 @@ public class PessoasRepository : IPessoasRepository {
             )
             VALUES
             (
-                @CD_PESSOA 	
-                , @DS_PESSOA 	
+                @DS_PESSOA 	
                 , @NR_CPF 		
                 , @DS_EMAIL 	
                 , @NR_TELEFONE 
@@ -122,8 +120,6 @@ public class PessoasRepository : IPessoasRepository {
                 , @DT_CADASTRO 	
                 , @DT_ATUALIZACAO
             );
-
-            SELECT CAST(SCOPE_IDENTITY() AS INT);
         ";
 
         return await connection.ExecuteScalarAsync<int>(sql, pessoa);
