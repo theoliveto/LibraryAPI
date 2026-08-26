@@ -6,6 +6,8 @@ namespace Library.Domain.Interfaces {
 
         Task<Usuarios?> ObterPorIdAsync(int id);
 
+        Task<Usuarios?> ObterPorLoginAsync(string login);
+
         Task<int> CriarAsync(Usuarios pessoa);
 
         Task<bool> AtualizarAsync(Usuarios pessoa);

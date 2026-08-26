@@ -11,7 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options => {
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 var connectionString = 
     builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("A ConnectionString 'DefaultConnection' não foi encontrada.");
@@ -25,6 +28,7 @@ builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 // Services
 builder.Services.AddScoped<IPessoasService, PessoasService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services
     .AddFluentMigratorCore()

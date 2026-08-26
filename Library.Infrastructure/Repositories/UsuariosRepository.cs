@@ -132,4 +132,28 @@ public class UsuariosRepository : IUsuariosRepository {
 
         return linhas > 0;
     }
+
+    public async Task<Usuarios?> ObterPorLoginAsync(string login) {
+        using var connection = _database.CreateConnection();
+
+        const string sql = @"
+            SELECT
+                CD_USUARIO
+                , DS_USUARIO
+                , DS_LOGIN
+                , DS_EMAIL
+                , DS_SENHA
+                , DS_OBSERVACOES
+                , X_ADMINISTRADOR
+                , X_ATIVO
+                , DT_CADASTRO
+                , DT_ATUALIZACAO
+            FROM
+                TBL_USUARIOS
+            WHERE
+                DS_LOGIN = @DS_LOGIN
+        ";
+
+        return await connection.QueryFirstOrDefaultAsync<Usuarios>(sql, new { DS_LOGIN = login } );
+    }
 }

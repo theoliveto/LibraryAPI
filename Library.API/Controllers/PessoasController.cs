@@ -72,10 +72,12 @@ public class PessoasController : ControllerBase {
         return NoContent();
     }
 
+    [HttpGet("verificar-cpf/{cpf}")]
     public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
         return await _service.VerificarCpfAsync(cpf, cdPessoa);
     }
 
+    [HttpGet("verificar-email/{email}")]
     public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
         return await _service.VerificarEmailAsync(email, cdPessoa);
     }
