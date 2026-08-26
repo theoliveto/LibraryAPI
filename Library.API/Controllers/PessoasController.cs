@@ -46,7 +46,7 @@ public class PessoasController : ControllerBase {
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Atualizar(int id,PutRequest request) {
+    public async Task<IActionResult> Atualizar(int id, PutRequest request) {
         try {
             var atualizado = await _service.AtualizarAsync(id,request);
 
@@ -70,5 +70,13 @@ public class PessoasController : ControllerBase {
         }
 
         return NoContent();
+    }
+
+    public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
+        return await _service.VerificarCpfAsync(cpf, cdPessoa);
+    }
+
+    public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
+        return await _service.VerificarEmailAsync(email, cdPessoa);
     }
 }

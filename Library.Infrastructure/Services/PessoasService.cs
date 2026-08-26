@@ -1,5 +1,5 @@
-﻿using Library.Domain.Services;
-using Library.Domain.Entities;
+﻿using Library.Domain.Entities;
+using Library.Domain.Services;
 using Library.Domain.Interfaces;
 using Library.Domain.DTOs.Pessoas;
 
@@ -89,6 +89,30 @@ namespace Library.Infrastructure.Services {
             }
 
             return await _repository.ExcluirAsync(id);
+        }
+
+        public async Task<bool> VerificarCpfAsync(string cpf, int? id) {
+            if (id <= 0) {
+                throw new ArgumentException("ID inválido.");
+            }
+
+            if (string.IsNullOrWhiteSpace(cpf)) {
+                throw new ArgumentException("O CPF da pessoa é obrigatório.");
+            }
+
+            return await _repository.VerificarCpfAsync(cpf, id);
+        }
+
+        public async Task<bool> VerificarEmailAsync(string email, int? id) {
+            if (id <= 0) {
+                throw new ArgumentException("ID inválido.");
+            }
+
+            if (string.IsNullOrWhiteSpace(email)) {
+                throw new ArgumentException("O E-mail da pessoa é obrigatório.");
+            }
+
+            return await _repository.VerificarEmailAsync(email, id);
         }
     }
 }

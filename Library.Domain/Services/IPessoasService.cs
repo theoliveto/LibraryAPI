@@ -12,5 +12,9 @@ namespace Library.Domain.Services {
         Task<bool> AtualizarAsync(int id, PutRequest request);
 
         Task<bool> ExcluirAsync(int id);
+
+        Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa);
+
+        Task<bool> VerificarEmailAsync(string email, int? cdPessoa);
     }
 }

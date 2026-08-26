@@ -169,4 +169,42 @@ public class PessoasRepository : IPessoasRepository {
 
         return linhas > 0;
     }
+
+    public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
+        using var connection = _database.CreateConnection();
+
+        const string sql = @"
+            SELECT *
+            FROM TBL_PESSOAS
+            WHERE NR_CPF = @NR_CPF
+            AND (@CD_PESSOA IS NULL OR CD_PESSOA <> @CD_PESSOA)
+        ";
+
+        var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { NR_CPF = cpf, CD_PESSOA = cdPessoa });
+
+        if (linhas == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
+        using var connection = _database.CreateConnection();
+
+        const string sql = @"
+            SELECT *
+            FROM TBL_PESSOAS
+            WHERE DS_EMAIL = @DS_EMAIL
+            AND (@CD_PESSOA IS NULL OR CD_PESSOA <> @CD_PESSOA)
+        ";
+
+        var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { DS_EMAIL = email, CD_PESSOA = cdPessoa });
+
+        if (linhas == null) {
+            return false;
+        }
+
+        return true;
+    }
 }
