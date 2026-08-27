@@ -1,11 +1,10 @@
-﻿using Library.Domain.Entities;
-using Library.Domain.DTOs.Usuarios;
+﻿using Library.Domain.DTOs.Usuarios;
 
 namespace Library.Domain.Services {
     public interface IUsuariosService {
-        Task<IEnumerable<Usuarios>> ObterTodosAsync();
+        Task<IEnumerable<UsuarioResponse>> ObterTodosAsync();
 
-        Task<Usuarios?> ObterPorIdAsync(int id);
+        Task<UsuarioResponse?> ObterPorIdAsync(int id);
 
         Task<int> CriarAsync(PostRequest request);
 

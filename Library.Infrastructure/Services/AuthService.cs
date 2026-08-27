@@ -5,22 +5,26 @@ using Library.Domain.Interfaces;
 namespace Library.Infrastructure.Services; 
 public class AuthService : IAuthService {
     private readonly IUsuariosRepository _usuariosRepository;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IJwtService _jwtService;
 
-    public AuthService(IUsuariosRepository usuariosRepository) {
+    public AuthService(IUsuariosRepository usuariosRepository, IPasswordHasher passwordHasher, IJwtService jwtService) {
         _usuariosRepository = usuariosRepository;
+        _passwordHasher = passwordHasher;
+        _jwtService = jwtService;
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request) {
-        if (string.IsNullOrWhiteSpace(request.DS_LOGIN)) {
+        if (string.IsNullOrWhiteSpace(request.dsLogin)) {
             throw new ArgumentException("O login é obrigatório.");
         }
 
-        if (string.IsNullOrWhiteSpace(request.DS_SENHA)) {
+        if (string.IsNullOrWhiteSpace(request.dsSenha)) {
             throw new ArgumentException("A senha é obrigatória.");
         }
 
         var usuario = await _usuariosRepository.ObterPorLoginAsync(
-            request.DS_LOGIN.Trim()
+            request.dsLogin.Trim()
         );
 
         if (usuario is null) {
@@ -31,11 +35,21 @@ public class AuthService : IAuthService {
             throw new UnauthorizedAccessException("Usuário inativo.");
         }
 
-        if (usuario.DS_SENHA != request.DS_SENHA) {
+        if (!_passwordHasher.Verify(request.dsSenha, usuario.DS_SENHA)) {
             throw new UnauthorizedAccessException("Login ou senha inválidos.");
         }
 
+        var token = _jwtService.GerarToken(
+            usuario.CD_USUARIO,
+            usuario.DS_USUARIO,
+            usuario.DS_LOGIN,
+            usuario.DS_EMAIL,
+            usuario.X_ADMINISTRADOR
+        );
+
         return new LoginResponse {
+            Token = token,
+
             Usuario = new UsuarioAuthDto {
                 CD_USUARIO = usuario.CD_USUARIO,
                 DS_USUARIO = usuario.DS_USUARIO,

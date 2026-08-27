@@ -1,11 +1,13 @@
 ﻿using Library.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Library.Domain.DTOs.Pessoas;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PessoasController : ControllerBase {
     private readonly IPessoasService _service;
 

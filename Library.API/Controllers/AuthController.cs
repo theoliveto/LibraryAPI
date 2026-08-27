@@ -1,6 +1,7 @@
 ﻿using Library.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Library.Domain.DTOs.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.API.Controllers;
 
@@ -13,6 +14,7 @@ public class AuthController : ControllerBase {
         _authService = authService;
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request) {
         try {
