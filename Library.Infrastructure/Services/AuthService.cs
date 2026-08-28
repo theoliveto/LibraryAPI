@@ -1,6 +1,7 @@
-﻿using Library.Domain.Services;
-using Library.Domain.DTOs.Auth;
+﻿using Library.Domain.DTOs.Auth;
+using Library.Domain.Entities;
 using Library.Domain.Interfaces;
+using Library.Domain.Services;
 
 namespace Library.Infrastructure.Services; 
 public class AuthService : IAuthService {
@@ -58,5 +59,13 @@ public class AuthService : IAuthService {
                 X_ADMINISTRADOR = usuario.X_ADMINISTRADOR
             }
         };
+    }
+
+    public async Task<Usuarios?> ObterUsuarioAutenticadoAsync(int id) {
+        if (id <= 0) {
+            return null;
+        }
+
+        return await _usuariosRepository.ObterPorIdAsync(id);
     }
 }
