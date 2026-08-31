@@ -13,5 +13,6 @@ namespace Library.Domain.Interfaces {
         Task<bool> AtualizarAsync(Usuarios pessoa);
 
         Task<bool> ExcluirAsync(int id);
+        Task<Usuarios?> ObterPorEmailAsync(string email);
     }
 }
