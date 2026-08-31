@@ -31,19 +31,18 @@ namespace Library.API.Controllers {
         }
 
         [HttpGet("reset-password/{token}")]
-        public async Task<IActionResult> ValidarToken(
-            string token) {
-            var valido = await _passwordResetService.ValidarTokenAsync(
-                token
-            );
+        public async Task<IActionResult> ValidarToken(string token) {
+            var valido = await _passwordResetService.ValidarTokenAsync(token);
 
             if (!valido) {
-                return BadRequest(new {
-                    mensagem = "O token é inválido ou expirou."
+                return BadRequest(new { 
+                    valido = false,
+                    mensagem = "O token é inválido ou expirou." 
                 });
             }
 
             return Ok(new {
+                valido = true,
                 mensagem = "Token válido."
             });
         }

@@ -12,8 +12,7 @@ namespace Library.Infrastructure.Services {
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
-        public RecuperacaoSenhaService(
-            IUsuariosRepository usuariosRepository, IRecuperacaoSenhaRepository passwordResetRepository, IPasswordHasher passwordHasher, IEmailService emailService, IConfiguration configuration) {
+        public RecuperacaoSenhaService(IUsuariosRepository usuariosRepository, IRecuperacaoSenhaRepository passwordResetRepository, IPasswordHasher passwordHasher, IEmailService emailService, IConfiguration configuration) {
             _usuariosRepository = usuariosRepository;
             _passwordResetRepository = passwordResetRepository;
             _passwordHasher = passwordHasher;
@@ -60,21 +59,72 @@ namespace Library.Infrastructure.Services {
             var assunto = "Redefinição de senha - Library";
 
             var corpo = $@"
-                <html>
-                    <body>
-                        <h2>Redefinição de senha</h2>
+                <!DOCTYPE html>
+                <html lang=""pt-BR"">
+                    <head>
+                        <meta charset=""UTF-8"">
+                        <title>Redefinição de Senha</title>
+                    </head>
+                    <body style=""margin:0; padding:0; background-color:#eef3f8; font-family: Arial, Helvetica, sans-serif;"">
+                        <table role=""presentation"" width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""background-color:#eef3f8; padding:30px 0;"">
+                            <tr>
+                                <td align=""center"">
+                                    <table role=""presentation"" width=""480"" cellpadding=""0"" cellspacing=""0"" style=""background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08);"">
 
-                        <p>Olá, {usuario.DS_USUARIO}.</p>
+                                        <!-- Cabeçalho -->
+                                        <tr>
+                                            <td align=""center"" style=""background-color:#0b3d66; padding:28px 20px;"">
+                                                <h1 style=""margin:0; color:#ffffff; font-size:20px; font-weight:600;"">
+                                                    Redefinição de Senha
+                                                </h1>
+                                            </td>
+                                        </tr>
 
-                        <p>Recebemos uma solicitação para redefinir sua senha.</p>
+                                        <!-- Corpo -->
+                                        <tr>
+                                            <td style=""padding:32px 36px; color:#1f2d3d;"">
+                                                <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
+                                                    Olá, <strong>{{usuario.DS_USUARIO}}</strong>.
+                                                </p>
 
-                        <p>Clique no botão abaixo para criar uma nova senha:</p>
+                                                <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
+                                                    Recebemos uma solicitação para redefinir a senha da sua conta.
+                                                    Para continuar, clique no botão abaixo e crie uma nova senha:
+                                                </p>
 
-                        <p><a href=""{link}"">Redefinir minha senha</a></p>
+                                                <table role=""presentation"" cellpadding=""0"" cellspacing=""0"" style=""margin:24px auto;"">
+                                                    <tr>
+                                                        <td align=""center"" bgcolor=""#1565a8"" style=""border-radius:6px;"">
+                                                            <a href=""{{link}}""
+                                                                style=""display:inline-block; padding:13px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:6px; background-color:#1565a8;"">
+                                                                Redefinir minha senha
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
 
-                        <p>Este link será válido por 30 minutos.</p>
+                                                <p style=""margin:0 0 16px; font-size:14px; line-height:1.6; color:#4a5b6c;"">
+                                                    Este link é válido por <strong>30 minutos</strong>. Após esse período, será necessário solicitar uma nova redefinição.
+                                                </p>
 
-                        <p>Se você não solicitou a redefinição da senha, pode ignorar este e-mail.</p>
+                                                <p style=""margin:0; font-size:14px; line-height:1.6; color:#4a5b6c;"">
+                                                    Se você não solicitou essa alteração, pode ignorar este e-mail com segurança. Sua senha permanecerá inalterada.
+                                                </p>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Rodapé -->
+                                        <tr>
+                                            <td align=""center"" style=""background-color:#eaf1f8; padding:18px 20px;"">
+                                                <p style=""margin:0; font-size:12px; color:#6b7f92;"">
+                                                    Este é um e-mail automático, por favor não responda.
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
                     </body>
                 </html>
             ";

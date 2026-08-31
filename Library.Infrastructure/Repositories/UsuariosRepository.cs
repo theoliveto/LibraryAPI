@@ -183,5 +183,30 @@ namespace Library.Infrastructure.Repositories {
                 new { DS_EMAIL = email }
             );
         }
+
+        public async Task<bool> AtualizarSenhaAsync(int cdUsuario, string senhaHash) {
+            using var connection = _database.CreateConnection();
+
+            const string sql = @"
+                UPDATE
+                    TBL_USUARIOS
+                SET
+                    DS_SENHA = @DS_SENHA,
+                    DT_ATUALIZACAO = @DT_ATUALIZACAO
+                WHERE
+                    CD_USUARIO = @CD_USUARIO
+            ";
+
+            var linhas = await connection.ExecuteAsync(
+                sql,
+                new {
+                    CD_USUARIO = cdUsuario,
+                    DS_SENHA = senhaHash,
+                    DT_ATUALIZACAO = DateTime.Now
+                }
+            );
+
+            return linhas > 0;
+        }
     }
 }
