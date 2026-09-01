@@ -36,12 +36,46 @@ namespace Library.Infrastructure.Services {
                 throw new UnauthorizedAccessException("Login ou senha inválidos.");
             }
 
+            if (usuario.DT_BLOQUEIO_LOGIN.HasValue) {
+                if (usuario.DT_BLOQUEIO_LOGIN.Value > DateTime.Now) {
+                    throw new UnauthorizedAccessException(
+                        "Usuário bloqueado temporariamente. Tente novamente mais tarde."
+                    );
+                }
+
+                await _usuariosRepository.ZerarTentativasLoginAsync(
+                    usuario.CD_USUARIO
+                );
+
+                usuario.NR_TENTATIVAS_LOGIN = 0;
+                usuario.DT_BLOQUEIO_LOGIN = null;
+            }
+
             if (!usuario.X_ATIVO) {
                 throw new UnauthorizedAccessException("Usuário inativo.");
             }
 
             if (!_passwordHasher.Verify(request.dsSenha, usuario.DS_SENHA)) {
-                throw new UnauthorizedAccessException("Login ou senha inválidos.");
+                await _usuariosRepository.IncrementarTentativaLoginAsync(
+                    usuario.CD_USUARIO
+                );
+
+                var tentativas = usuario.NR_TENTATIVAS_LOGIN + 1;
+
+                if (tentativas >= 3) {
+                    await _usuariosRepository.BloquearLoginAsync(
+                        usuario.CD_USUARIO,
+                        DateTime.Now.AddHours(3)
+                    );
+
+                    throw new UnauthorizedAccessException(
+                        "Número máximo de tentativas atingido. Usuário bloqueado por 3 horas."
+                    );
+                }
+
+                throw new UnauthorizedAccessException(
+                    $"Login ou senha inválidos. Tentativa {tentativas} de 3."
+                );
             }
 
             var token = _jwtService.GerarToken(

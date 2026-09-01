@@ -208,5 +208,56 @@ namespace Library.Infrastructure.Repositories {
 
             return linhas > 0;
         }
+
+        public async Task IncrementarTentativaLoginAsync(int id) {
+            using var connection = _database.CreateConnection();
+
+            const string sql = @"
+                UPDATE 
+                    TBL_USUARIOS
+                SET 
+                    NR_TENTATIVAS_LOGIN = NR_TENTATIVAS_LOGIN + 1
+                WHERE 
+                    CD_USUARIO = @CD_USUARIO
+            ";
+
+            await connection.ExecuteAsync(sql, new { CD_USUARIO = id });
+        }
+
+        public async Task ZerarTentativasLoginAsync(int id) {
+            using var connection = _database.CreateConnection();
+
+            const string sql = @"
+                UPDATE 
+                    TBL_USUARIOS
+                SET
+                    NR_TENTATIVAS_LOGIN = 0,
+                    DT_BLOQUEIO_LOGIN = NULL
+                WHERE 
+                    CD_USUARIO = @CD_USUARIO
+            ";
+
+            await connection.ExecuteAsync(sql, new {
+                CD_USUARIO = id
+            });
+        }
+
+        public async Task BloquearLoginAsync(int id, DateTime dataBloqueio) {
+            using var connection = _database.CreateConnection();
+
+            const string sql = @"
+                UPDATE 
+                    TBL_USUARIOS
+                SET
+                    DT_BLOQUEIO_LOGIN = @DT_BLOQUEIO_LOGIN
+                WHERE 
+                    CD_USUARIO = @CD_USUARIO
+            ";
+
+            await connection.ExecuteAsync(sql, new {
+                CD_USUARIO = id,
+                DT_BLOQUEIO_LOGIN = dataBloqueio 
+            });
+        }
     }
 }
