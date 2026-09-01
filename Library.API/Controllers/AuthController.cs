@@ -57,23 +57,4 @@ public class AuthController : ControllerBase {
             X_ADMINISTRADOR = usuario.X_ADMINISTRADOR
         });
     }
-
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> RedefinirSenha([FromBody] ResetPasswordRequest request) {
-        try {
-            await _authService.RedefinirSenhaAsync(request);
-
-            return Ok(new {
-                mensagem = "Senha redefinida com sucesso."
-            });
-        } catch (ArgumentException ex) {
-            return BadRequest(new {
-                mensagem = ex.Message
-            });
-        } catch (UnauthorizedAccessException ex) {
-            return Unauthorized(new {
-                mensagem = ex.Message
-            });
-        }
-    }
 }

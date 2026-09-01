@@ -13,8 +13,7 @@ namespace Library.API.Controllers {
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> SolicitarRecuperacao(
-        [FromBody] ForgotPasswordRequest request) {
+        public async Task<IActionResult> SolicitarRecuperacao([FromBody] ForgotPasswordRequest request) {
             try {
                 await _passwordResetService.SolicitarRecuperacaoAsync(
                     request.Email
@@ -48,8 +47,7 @@ namespace Library.API.Controllers {
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> RedefinirSenha(
-            [FromBody] ResetPasswordRequest request) {
+        public async Task<IActionResult> RedefinirSenha([FromBody] ResetPasswordRequest request) {
             try {
                 var sucesso =
                     await _passwordResetService.RedefinirSenhaAsync(

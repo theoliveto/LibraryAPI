@@ -84,7 +84,7 @@ namespace Library.Infrastructure.Services {
                                         <tr>
                                             <td style=""padding:32px 36px; color:#1f2d3d;"">
                                                 <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
-                                                    Olá, <strong>{{usuario.DS_USUARIO}}</strong>.
+                                                    Olá, <strong>{usuario.DS_USUARIO}</strong>.
                                                 </p>
 
                                                 <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
@@ -95,7 +95,7 @@ namespace Library.Infrastructure.Services {
                                                 <table role=""presentation"" cellpadding=""0"" cellspacing=""0"" style=""margin:24px auto;"">
                                                     <tr>
                                                         <td align=""center"" bgcolor=""#1565a8"" style=""border-radius:6px;"">
-                                                            <a href=""{{link}}""
+                                                            <a href=""{link}""
                                                                 style=""display:inline-block; padding:13px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:6px; background-color:#1565a8;"">
                                                                 Redefinir minha senha
                                                             </a>
