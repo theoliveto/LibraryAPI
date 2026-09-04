@@ -19,7 +19,7 @@ public class Migration_006_InsertUsuarios : Migration {
     }
 
     public override void Down() {
-        Delete.FromTable("Usuarios").
+        Delete.FromTable("TBL_USUARIOS").
             Row(new { DS_EMAIL = "oliveto.vinicius@uceff.edu.br", });
     }
 }
