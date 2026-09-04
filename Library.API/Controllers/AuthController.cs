@@ -37,7 +37,7 @@ public class AuthController : ControllerBase {
     [Authorize]
     [HttpGet("me")]
     public async Task<IActionResult> Me() {
-        var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var usuarioId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (!int.TryParse(usuarioId, out var id)) {
             return Unauthorized();
