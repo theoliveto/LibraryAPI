@@ -71,6 +71,8 @@ builder.Services.AddSingleton(new DatabaseConnection(connectionString));
 builder.Services.AddScoped<IPessoasRepository, PessoasRepository>();
 builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 builder.Services.AddScoped<IRecuperacaoSenhaRepository, RecuperacaoSenhaRepository>();
+builder.Services.AddScoped<IAutorRepository, AutoresRepository>();
+builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 
 builder.Services.AddScoped<IPessoasService, PessoasService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
@@ -79,6 +81,8 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRecuperacaoSenhaService, RecuperacaoSenhaService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAutorService, AutoresService>();
+builder.Services.AddScoped<ICategoriasService, CategoriasService>();
 
 builder.Services
     .AddFluentMigratorCore()
