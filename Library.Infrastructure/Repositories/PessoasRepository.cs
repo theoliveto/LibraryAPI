@@ -3,208 +3,140 @@ using Library.Domain.Entities;
 using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 
-namespace Library.Infrastructure.Repositories;
+namespace Library.Infrastructure.Repositories { 
+    public class PessoasRepository : RepositoryBase<Pessoas>, IPessoasRepository {
+        protected override string TableName => "Pessoas";
+        protected override string PrimaryKeyColumn => "id";
 
-public class PessoasRepository : IPessoasRepository {
-    private readonly DatabaseConnection _database;
+        public PessoasRepository(DatabaseConnection database) : base(database) { }
 
-    public PessoasRepository(DatabaseConnection database) {
-        _database = database;
-    }
+        public override async Task<int> CriarAsync(Pessoas pessoa) {
+            using var connection = Database.CreateConnection();
 
-    public async Task<IEnumerable<Pessoas>> ObterTodosAsync() {
-        using var connection = _database.CreateConnection();
+            const string sql = @"
+                INSERT INTO Pessoas
+                (
+                    descricao 	
+                    , razaoSocial 		
+                    , usuarioId 	
+                    , cpfCnpj 
+                    , email 	
+                    , celular 		
+                    , telefone 	
+                    , nascimento 			
+                    , genero 	
+                    , cep 		
+                    , endereco 		
+                    , cidade 		
+                    , estado 		
+                    , bairro 	
+                    , numero 		
+                    , complemento 	
+                    , observacoes 
+                    , ativo
+                    , cadastro
+                    , atualizacao
+                )
+                VALUES
+                (
+                    @descricao 	
+                    , @razaoSocial 		
+                    , @usuarioId 	
+                    , @cpfCnpj 
+                    , @email 	
+                    , @celular 		
+                    , @telefone 	
+                    , @nascimento 			
+                    , @genero 	
+                    , @cep 		
+                    , @endereco 		
+                    , @cidade 		
+                    , @estado 		
+                    , @bairro 	
+                    , @numero 		
+                    , @complemento 	
+                    , @observacoes 
+                    , @ativo
+                    , @cadastro
+                    , @atualizacao
+                );
+            ";
 
-        const string sql = @"
-            SELECT
-                CD_PESSOA 	
-                , DS_PESSOA 	
-                , NR_CPF 		
-                , DS_EMAIL 	
-                , NR_TELEFONE 
-                , DT_NASCIMENTO 	
-                , DS_GENERO 		
-                , DS_OBSERVACOES 	
-                , NR_CEP 			
-                , DS_ENDERECO 	
-                , DS_CIDADE 		
-                , DS_ESTADO 		
-                , DS_BAIRRO 		
-                , NR_NUMERO 		
-                , DS_COMPLEMENTO 	
-                , X_ATIVO 		
-                , DT_CADASTRO 	
-                , DT_ATUALIZACAO 	
-            FROM 
-                TBL_PESSOAS
-            ORDER BY 
-                DS_PESSOA
-         ";
-
-        return await connection.QueryAsync<Pessoas>(sql);
-    }
-
-    public async Task<Pessoas?> ObterPorIdAsync(int id) {
-        using var connection = _database.CreateConnection();
-
-        const string sql = @"
-            SELECT
-                CD_PESSOA 	
-                , DS_PESSOA 	
-                , NR_CPF 		
-                , DS_EMAIL 	
-                , NR_TELEFONE 
-                , DT_NASCIMENTO 	
-                , DS_GENERO 		
-                , DS_OBSERVACOES 	
-                , NR_CEP 			
-                , DS_ENDERECO 	
-                , DS_CIDADE 		
-                , DS_ESTADO 		
-                , DS_BAIRRO 		
-                , NR_NUMERO 		
-                , DS_COMPLEMENTO 	
-                , X_ATIVO 		
-                , DT_CADASTRO 	
-                , DT_ATUALIZACAO 	
-            FROM 
-                TBL_PESSOAS
-            WHERE 
-                CD_PESSOA = @CD_PESSOA
-        ";
-
-        return await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { CD_PESSOA = id });
-    }
-
-    public async Task<int> CriarAsync(Pessoas pessoa) {
-        using var connection = _database.CreateConnection();
-
-        const string sql = @"
-            INSERT INTO TBL_PESSOAS
-            (
-                DS_PESSOA 	
-                , NR_CPF 		
-                , DS_EMAIL 	
-                , NR_TELEFONE 
-                , DT_NASCIMENTO 	
-                , DS_GENERO 		
-                , DS_OBSERVACOES 	
-                , NR_CEP 			
-                , DS_ENDERECO 	
-                , DS_CIDADE 		
-                , DS_ESTADO 		
-                , DS_BAIRRO 		
-                , NR_NUMERO 		
-                , DS_COMPLEMENTO 	
-                , X_ATIVO 		
-                , DT_CADASTRO 	
-                , DT_ATUALIZACAO 
-            )
-            VALUES
-            (
-                @DS_PESSOA 	
-                , @NR_CPF 		
-                , @DS_EMAIL 	
-                , @NR_TELEFONE 
-                , @DT_NASCIMENTO 	
-                , @DS_GENERO 		
-                , @DS_OBSERVACOES 	
-                , @NR_CEP 			
-                , @DS_ENDERECO 	
-                , @DS_CIDADE 		
-                , @DS_ESTADO 		
-                , @DS_BAIRRO 		
-                , @NR_NUMERO 		
-                , @DS_COMPLEMENTO 	
-                , @X_ATIVO 		
-                , @DT_CADASTRO 	
-                , @DT_ATUALIZACAO
-            );
-        ";
-
-        return await connection.ExecuteScalarAsync<int>(sql, pessoa);
-    }
-
-    public async Task<bool> AtualizarAsync(Pessoas pessoa) {
-        using var connection = _database.CreateConnection();
-
-        const string sql = @"
-            UPDATE 
-                TBL_PESSOAS
-            SET
-                DS_PESSOA = @DS_PESSOA
-                , NR_CPF = @NR_CPF
-                , DS_EMAIL = @DS_EMAIL
-                , NR_TELEFONE = @NR_TELEFONE
-                , DT_NASCIMENTO = @DT_NASCIMENTO
-                , DS_GENERO = @DS_GENERO
-                , DS_OBSERVACOES = @DS_OBSERVACOES
-                , NR_CEP = @NR_CEP  
-                , DS_ENDERECO = @DS_ENDERECO
-                , DS_CIDADE = @DS_CIDADE
-                , DS_ESTADO = @DS_ESTADO
-                , DS_BAIRRO = @DS_BAIRRO
-                , NR_NUMERO = @NR_NUMERO
-                , DS_COMPLEMENTO = @DS_COMPLEMENTO
-                , X_ATIVO = @X_ATIVO
-                , DT_ATUALIZACAO = @DT_ATUALIZACAO
-            WHERE 
-                CD_PESSOA = @CD_PESSOA
-        ";
-
-        var linhas = await connection.ExecuteAsync(sql, pessoa);
-
-        return linhas > 0;
-    }
-
-    public async Task<bool> ExcluirAsync(int id) {
-        using var connection = _database.CreateConnection();
-
-        const string sql = @"
-            DELETE FROM TBL_PESSOAS
-            WHERE CD_PESSOA = @CD_PESSOA
-        ";
-
-        var linhas = await connection.ExecuteAsync(sql, new { CD_PESSOA = id });
-
-        return linhas > 0;
-    }
-
-    public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
-        using var connection = _database.CreateConnection();
-
-        const string sql = @"
-            SELECT *
-            FROM TBL_PESSOAS
-            WHERE NR_CPF = @NR_CPF
-            AND (@CD_PESSOA IS NULL OR CD_PESSOA <> @CD_PESSOA)
-        ";
-
-        var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { NR_CPF = cpf, CD_PESSOA = cdPessoa });
-
-        if (linhas == null) {
-            return false;
+            return await connection.ExecuteScalarAsync<int>(sql, pessoa);
         }
 
-        return true;
-    }
+        public override async Task<bool> AtualizarAsync(Pessoas pessoa) {
+            using var connection = Database.CreateConnection();
 
-    public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
-        using var connection = _database.CreateConnection();
+            const string sql = @"
+                UPDATE 
+                    Pessoas
+                SET
+                    descricao = @descricao
+                    , razaoSocial = @razaoSocial
+                    , usuarioId = @usuarioId 	
+                    , cpfCnpj = @cpfCnpj
+                    , email = @email 	
+                    , celular = @celular		
+                    , telefone = @telefone 	
+                    , nascimento = @nascimento 			
+                    , genero = @genero
+                    , cep = @cep
+                    , endereco = @endereco	
+                    , cidade = @cidade
+                    , estado = @estado
+                    , bairro = @bairro	
+                    , numero = @numero
+                    , complemento = @complemento	
+                    , observacoes = @observacoes
+                    , ativo = @ativo
+                    , cadastro = @cadastro
+                    , atualizacao = @atualizacao
+                WHERE 
+                    id = @id
+            ";
 
-        const string sql = @"
-            SELECT *
-            FROM TBL_PESSOAS
-            WHERE DS_EMAIL = @DS_EMAIL
-            AND (@CD_PESSOA IS NULL OR CD_PESSOA <> @CD_PESSOA)
-        ";
+            var linhas = await connection.ExecuteAsync(sql, pessoa);
 
-        var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { DS_EMAIL = email, CD_PESSOA = cdPessoa });
-
-        if (linhas == null) {
-            return false;
+            return linhas > 0;
         }
 
-        return true;
+        public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
+            using var connection = Database.CreateConnection();
+
+            const string sql = @"
+                SELECT *
+                FROM Pessoas
+                WHERE cpfCnpj = @cpfCnpj
+                AND (@id IS NULL OR id <> @id)
+            ";
+
+            var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { cpfCnpj = cpf, id = cdPessoa });
+
+            if (linhas == null) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
+            using var connection = Database.CreateConnection();
+
+            const string sql = @"
+                SELECT *
+                FROM Pessoas
+                WHERE email = @email
+                AND (@id IS NULL OR id <> @id)
+            ";
+
+            var linhas = await connection.QueryFirstOrDefaultAsync<Pessoas>(sql, new { email = email, id = cdPessoa });
+
+            if (linhas == null) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

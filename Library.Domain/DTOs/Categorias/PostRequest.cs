@@ -1,14 +1,11 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Library.Domain.DTOs.Categorias {
+﻿namespace Library.Domain.DTOs.Categorias {
     public class PostRequest {
-        [JsonPropertyName("dsCategoria")]
-        public string DS_CATEGORIA { get; set; } = string.Empty;
+        public string descricao { get; set; } = string.Empty;
+        public string? observacoes { get; set; }
+        public bool ativo { get; set; }
+    }
 
-        [JsonPropertyName("dsObservacoes")]
-        public string? DS_OBSERVACOES { get; set; }
+    public class PutRequest : PostRequest {
 
-        [JsonPropertyName("xAtivo")]
-        public bool X_ATIVO { get; set; }
     }
 }

@@ -1,26 +1,19 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Library.Domain.DTOs.Usuarios {
+﻿namespace Library.Domain.DTOs.Usuarios {
     public class PostRequest {
-        [JsonPropertyName("dsUsuario")]
-        public string DS_USUARIO { get; set; } = string.Empty;
+        public string descricao { get; set; } = string.Empty;
+        public string login { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string senha { get; set; } = string.Empty;
+        public string perfil { get; set; } = string.Empty;
+        public byte[]? avatar { get; set; }
+        public bool administrador { get; set; }
+        public int tentativasLogin { get; set; }
+        public DateTime? bloqueioLogin { get; set; }
+        public string? observacoes { get; set; }
+        public bool ativo { get; set; }
+    }
 
-        [JsonPropertyName("dsLogin")]
-        public string DS_LOGIN { get; set; } = string.Empty;
+    public class PutRequest : PostRequest {
 
-        [JsonPropertyName("dsEmail")]
-        public string DS_EMAIL { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsSenha")]
-        public string DS_SENHA { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsObservacoes")]
-        public string? DS_OBSERVACOES { get; set; }
-
-        [JsonPropertyName("xAtivo")]
-        public bool X_ATIVO { get; set; }
-
-        [JsonPropertyName("xAdministrador")]
-        public bool X_ADMINISTRADOR { get; set; }
     }
 }

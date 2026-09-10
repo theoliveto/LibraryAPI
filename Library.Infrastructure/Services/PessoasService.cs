@@ -4,91 +4,59 @@ using Library.Domain.Interfaces;
 using Library.Domain.DTOs.Pessoas;
 
 namespace Library.Infrastructure.Services {
-    public class PessoasService : IPessoasService {
+    public class PessoasService : ServiceBase<Pessoas, PostRequest, PutRequest>, IPessoasService {
         private readonly IPessoasRepository _repository;
 
-        public PessoasService(IPessoasRepository repository) {
+        public PessoasService(IPessoasRepository repository) : base(repository) {
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Pessoas>> ObterTodosAsync() {
-            return await _repository.ObterTodosAsync();
-        }
-
-        public async Task<Pessoas?> ObterPorIdAsync(int id) {
-            if (id <= 0) {
-                return null;
-            }
-
-            return await _repository.ObterPorIdAsync(id);
-        }
-
-        public async Task<int> CriarAsync(PostRequest request) {
-            if (string.IsNullOrWhiteSpace(request.DS_PESSOA)) {
-                throw new ArgumentException("O nome da pessoa é obrigatório.");
-            }
-
-            var pessoa = new Pessoas() {
-                DS_PESSOA = request.DS_PESSOA.Trim(),
-                NR_CPF = request.NR_CPF,
-                DS_EMAIL = request.DS_EMAIL,
-                NR_TELEFONE = request.NR_TELEFONE,
-                DT_NASCIMENTO = request.DT_NASCIMENTO,
-                DS_GENERO = request.DS_GENERO,
-                DS_OBSERVACOES = request.DS_OBSERVACOES,
-                NR_CEP = request.NR_CEP,
-                DS_ENDERECO = request.DS_ENDERECO,
-                DS_CIDADE = request.DS_CIDADE,
-                DS_ESTADO = request.DS_ESTADO,
-                DS_BAIRRO = request.DS_BAIRRO,
-                NR_NUMERO = request.NR_NUMERO,
-                DS_COMPLEMENTO = request.DS_COMPLEMENTO,
-                X_ATIVO = request.X_ATIVO,
-                DT_CADASTRO = DateTime.Now,
-                DT_ATUALIZACAO = DateTime.Now
+        protected override Pessoas MapearParaCriacao(PostRequest request) {
+            return new Pessoas {
+                descricao = request.descricao,
+                razaoSocial = request.razaoSocial,
+                usuarioId = request.usuarioId,
+                cpfCnpj = request.cpfCnpj,
+                email = request.email,
+                celular = request.celular,
+                telefone = request.telefone,
+                nascimento = request.nascimento,
+                genero = request.genero,
+                cep = request.cep,
+                endereco = request.endereco,
+                cidade = request.cidade,
+                estado = request.estado,
+                bairro = request.bairro,
+                numero = request.numero,
+                complemento = request.complemento,
+                observacoes = request.observacoes,
+                ativo = request.ativo,
+                cadastro = DateTime.Now
             };
-
-            return await _repository.CriarAsync(pessoa);
         }
 
-        public async Task<bool> AtualizarAsync(int id, PutRequest request) {
-            if (id <= 0) {
-                throw new ArgumentException("ID inválido.");
-            }
+        protected override Pessoas MapearParaAtualizacao(int id, PutRequest request, Pessoas existente) {
+            existente.descricao = request.descricao;
+            existente.razaoSocial = request.razaoSocial;
+            existente.usuarioId = request.usuarioId;
+            existente.cpfCnpj = request.cpfCnpj;
+            existente.email = request.email;
+            existente.celular = request.celular;
+            existente.telefone = request.telefone;
+            existente.nascimento = request.nascimento;
+            existente.genero = request.genero;
+            existente.cep = request.cep;
+            existente.endereco = request.endereco;
+            existente.cidade = request.cidade;
+            existente.estado = request.estado;
+            existente.bairro = request.bairro;
+            existente.numero = request.numero;
+            existente.complemento = request.complemento;
+            existente.observacoes = request.observacoes;
+            existente.ativo = request.ativo;
+            existente.atualizacao = DateTime.Now;
 
-            if (string.IsNullOrWhiteSpace(request.DS_PESSOA)) {
-                throw new ArgumentException("O nome da pessoa é obrigatório.");
-            }
-
-            var pessoa = new Pessoas() {
-                CD_PESSOA = id,
-                DS_PESSOA = request.DS_PESSOA.Trim(),
-                NR_CPF = request.NR_CPF,
-                DS_EMAIL = request.DS_EMAIL,
-                NR_TELEFONE = request.NR_TELEFONE,
-                DT_NASCIMENTO = request.DT_NASCIMENTO,
-                DS_GENERO = request.DS_GENERO,
-                DS_OBSERVACOES = request.DS_OBSERVACOES,
-                NR_CEP = request.NR_CEP,
-                DS_ENDERECO = request.DS_ENDERECO,
-                DS_CIDADE = request.DS_CIDADE,
-                DS_ESTADO = request.DS_ESTADO,
-                DS_BAIRRO = request.DS_BAIRRO,
-                NR_NUMERO = request.NR_NUMERO,
-                DS_COMPLEMENTO = request.DS_COMPLEMENTO,
-                X_ATIVO = request.X_ATIVO,
-                DT_ATUALIZACAO = DateTime.Now
-            };
-
-            return await _repository.AtualizarAsync(pessoa);
-        }
-
-        public async Task<bool> ExcluirAsync(int id) {
-            if (id <= 0) {
-                return false;
-            }
-
-            return await _repository.ExcluirAsync(id);
+            return existente;
         }
 
         public async Task<bool> VerificarCpfAsync(string cpf, int? id) {

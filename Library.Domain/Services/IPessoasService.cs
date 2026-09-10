@@ -1,20 +1,9 @@
-﻿using Library.Domain.DTOs.Pessoas;
-using Library.Domain.Entities;
+﻿using Library.Domain.Entities;
+using Library.Domain.DTOs.Pessoas;
 
 namespace Library.Domain.Services {
-    public interface IPessoasService {
-        Task<IEnumerable<Pessoas>> ObterTodosAsync();
-
-        Task<Pessoas?> ObterPorIdAsync(int id);
-
-        Task<int> CriarAsync(PostRequest request);
-
-        Task<bool> AtualizarAsync(int id, PutRequest request);
-
-        Task<bool> ExcluirAsync(int id);
-
+    public interface IPessoasService : IServiceBase<Pessoas, PostRequest, PutRequest> {
         Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa);
-
         Task<bool> VerificarEmailAsync(string email, int? cdPessoa);
     }
 }

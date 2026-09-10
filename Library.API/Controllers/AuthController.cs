@@ -1,9 +1,9 @@
-﻿using Library.Domain.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Library.Domain.DTOs.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Library.Domain.Services.Auth;
 
 namespace Library.API.Controllers;
 

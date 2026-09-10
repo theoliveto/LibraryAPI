@@ -4,90 +4,43 @@ using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 
 namespace Library.Infrastructure.Repositories {  
-    public class UsuariosRepository : IUsuariosRepository {
-        private readonly DatabaseConnection _database;
+    public class UsuariosRepository : RepositoryBase<Usuarios>, IUsuariosRepository {
+        protected override string TableName => "Usuarios";
+        protected override string PrimaryKeyColumn => "id";
 
-        public UsuariosRepository(DatabaseConnection database) {
-            _database = database;
-        }
+        public UsuariosRepository(DatabaseConnection database) : base(database) { }
 
-        public async Task<IEnumerable<Usuarios>> ObterTodosAsync() {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                SELECT
-                    CD_USUARIO 	
-                    , DS_USUARIO 	
-                    , DS_LOGIN 		
-                    , DS_EMAIL 	
-                    , DS_SENHA 		
-                    , DS_OBSERVACOES 	
-                    , X_ADMINISTRADOR
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 	
-                FROM 
-                    TBL_USUARIOS
-                ORDER BY 
-                    DS_USUARIO
-             ";
-
-            return await connection.QueryAsync<Usuarios>(sql);
-        }
-
-        public async Task<Usuarios?> ObterPorIdAsync(int id) {
-            using var connection = _database.CreateConnection();
+        public override async Task<int> CriarAsync(Usuarios usuario) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
-                SELECT
-                    CD_USUARIO 	
-                    , DS_USUARIO 	
-                    , DS_LOGIN 		
-                    , DS_EMAIL 	
-                    , DS_SENHA 		
-                    , DS_OBSERVACOES 	
-                    , X_ADMINISTRADOR
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 	
-                FROM 
-                    TBL_USUARIOS
-                WHERE 
-                    CD_USUARIO = @CD_USUARIO
-            ";
-
-            return await connection.QueryFirstOrDefaultAsync<Usuarios>(sql, new { CD_USUARIO = id });
-        }
-
-        public async Task<int> CriarAsync(Usuarios usuario) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                INSERT INTO TBL_USUARIOS
+                INSERT INTO Usuarios
                 (
-                    CD_USUARIO 	
-                    , DS_USUARIO 	
-                    , DS_LOGIN 		
-                    , DS_EMAIL 	
-                    , DS_SENHA 		
-                    , DS_OBSERVACOES 	
-                    , X_ADMINISTRADOR
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 
+                    descricao 	
+                    , login 	
+                    , email 		
+                    , perfil 	
+                    , administrador 		
+                    , tentativasLogin 	
+                    , bloqueioLogin
+                    , observacoes 		
+                    , ativo 	
+                    , cadastro
+                    , atualizacao
                 )
                 VALUES
                 (
-                    @CD_USUARIO 	
-                    , @DS_USUARIO 	
-                    , @DS_LOGIN 		
-                    , @DS_EMAIL 	
-                    , @DS_SENHA 		
-                    , @DS_OBSERVACOES 	
-                    , @X_ADMINISTRADOR
-                    , @X_ATIVO 		
-                    , @DT_CADASTRO 	
-                    , @DT_ATUALIZACAO 
+                    @descricao 	
+                    , @login 	
+                    , @email 		
+                    , @perfil 	
+                    , @administrador 		
+                    , 0	
+                    , @bloqueioLogin
+                    , @observacoes 		
+                    , @ativo 	
+                    , @cadastro
+                    , @atualizacao
                 );
 
                 SELECT CAST(SCOPE_IDENTITY() AS INT);
@@ -96,23 +49,25 @@ namespace Library.Infrastructure.Repositories {
             return await connection.ExecuteScalarAsync<int>(sql, usuario);
         }
 
-        public async Task<bool> AtualizarAsync(Usuarios usuario) {
-            using var connection = _database.CreateConnection();
+        public override async Task<bool> AtualizarAsync(Usuarios usuario) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 UPDATE 
-                    TBL_USUARIOS
+                    Usuarios
                 SET
-                    DS_USUARIO = @DS_USUARIO
-                    , DS_LOGIN = @DS_LOGIN
-                    , DS_EMAIL = @DS_EMAIL
-                    , DS_SENHA = @DS_SENHA
-                    , DS_OBSERVACOES = @DS_OBSERVACOES
-                    , X_ADMINISTRADOR = @X_ADMINISTRADOR
-                    , X_ATIVO = @X_ATIVO
-                    , DT_ATUALIZACAO = @DT_ATUALIZACAO
+                    descricao = @descricao
+                    , login = @login
+                    , email = @email
+                    , perfil = @perfil
+                    , administrador = @administrador
+                    , tentativasLogin = 0
+                    , bloqueioLogin = @bloqueioLogin   
+                    , observacoes = @observacoes
+                    , ativo = @ativo
+                    , atualizacao = @atualizacao
                 WHERE 
-                    CD_USUARIO = @CD_USUARIO
+                    id = @id
             ";
 
             var linhas = await connection.ExecuteAsync(sql, usuario);
@@ -120,89 +75,75 @@ namespace Library.Infrastructure.Repositories {
             return linhas > 0;
         }
 
-        public async Task<bool> ExcluirAsync(int id) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                DELETE FROM TBL_USUARIOS
-                WHERE CD_USUARIO = @CD_USUARIO
-            ";
-
-            var linhas = await connection.ExecuteAsync(sql, new { CD_USUARIO = id });
-
-            return linhas > 0;
-        }
-
         public async Task<Usuarios?> ObterPorLoginAsync(string login) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 SELECT
-                    CD_USUARIO
-                    , DS_USUARIO
-                    , DS_LOGIN
-                    , DS_EMAIL
-                    , DS_SENHA
-                    , DS_OBSERVACOES
-                    , X_ADMINISTRADOR
-                    , X_ATIVO
-                    , DT_CADASTRO
-                    , DT_ATUALIZACAO
+                    id
+                    , descricao
+                    , login
+                    , email
+                    , senha
+                    , perfil
+                    , administrador
+                    , observacoes 
+                    , ativo
+                    , cadastro
+                    , atualizacao
                 FROM
-                    TBL_USUARIOS
+                    Usuarios
                 WHERE
-                    DS_LOGIN = @DS_LOGIN
+                    login = @login
             ";
 
-            return await connection.QueryFirstOrDefaultAsync<Usuarios>(sql, new { DS_LOGIN = login } );
+            return await connection.QueryFirstOrDefaultAsync<Usuarios>(sql, new { login = login } );
         }
 
         public async Task<Usuarios?> ObterPorEmailAsync(string email) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 SELECT
-                    CD_USUARIO
-                    , DS_USUARIO
-                    , DS_LOGIN
-                    , DS_EMAIL
-                    , DS_SENHA
-                    , DS_OBSERVACOES
-                    , X_ADMINISTRADOR
-                    , X_ATIVO
-                    , DT_CADASTRO
-                    , DT_ATUALIZACAO
+                    id
+                    , descricao
+                    , login
+                    , email
+                    , senha
+                    , perfil
+                    , administrador
+                    , observacoes 
+                    , ativo
+                    , cadastro
+                    , atualizacao
                 FROM
-                    TBL_USUARIOS
+                    Usuarios
                 WHERE
-                    DS_EMAIL = @DS_EMAIL
+                    email = @email
             ";
 
-            return await connection.QueryFirstOrDefaultAsync<Usuarios>(
-                sql,
-                new { DS_EMAIL = email }
-            );
+            return await connection.QueryFirstOrDefaultAsync<Usuarios>(sql, new { email = email } );
         }
 
         public async Task<bool> AtualizarSenhaAsync(int cdUsuario, string senhaHash) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 UPDATE
-                    TBL_USUARIOS
+                    Usuarios
                 SET
-                    DS_SENHA = @DS_SENHA,
-                    DT_ATUALIZACAO = @DT_ATUALIZACAO
+                    senha = @senha,
+                    atualizacao = @atualizacao
                 WHERE
-                    CD_USUARIO = @CD_USUARIO
+                    id = @id
             ";
 
             var linhas = await connection.ExecuteAsync(
                 sql,
                 new {
-                    CD_USUARIO = cdUsuario,
-                    DS_SENHA = senhaHash,
-                    DT_ATUALIZACAO = DateTime.Now
+                    id = cdUsuario,
+                    senha = senhaHash,
+                    atualizacao = DateTime.Now
                 }
             );
 
@@ -210,53 +151,51 @@ namespace Library.Infrastructure.Repositories {
         }
 
         public async Task IncrementarTentativaLoginAsync(int id) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 UPDATE 
-                    TBL_USUARIOS
+                    Usuarios
                 SET 
-                    NR_TENTATIVAS_LOGIN = NR_TENTATIVAS_LOGIN + 1
+                    tentativasLogin = tentativasLogin + 1
                 WHERE 
-                    CD_USUARIO = @CD_USUARIO
+                    id = @id
             ";
 
-            await connection.ExecuteAsync(sql, new { CD_USUARIO = id });
+            await connection.ExecuteAsync(sql, new { id = id });
         }
 
         public async Task ZerarTentativasLoginAsync(int id) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 UPDATE 
-                    TBL_USUARIOS
+                    Usuarios
                 SET
-                    NR_TENTATIVAS_LOGIN = 0,
-                    DT_BLOQUEIO_LOGIN = NULL
+                    tentativasLogin = 0,
+                    bloqueioLogin = NULL
                 WHERE 
-                    CD_USUARIO = @CD_USUARIO
+                    id = @id
             ";
 
-            await connection.ExecuteAsync(sql, new {
-                CD_USUARIO = id
-            });
+            await connection.ExecuteAsync(sql, new { id = id });
         }
 
         public async Task BloquearLoginAsync(int id, DateTime dataBloqueio) {
-            using var connection = _database.CreateConnection();
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
                 UPDATE 
-                    TBL_USUARIOS
+                    Usuarios
                 SET
-                    DT_BLOQUEIO_LOGIN = @DT_BLOQUEIO_LOGIN
+                    bloqueioLogin = @bloqueioLogin
                 WHERE 
-                    CD_USUARIO = @CD_USUARIO
+                    id = @id
             ";
 
             await connection.ExecuteAsync(sql, new {
-                CD_USUARIO = id,
-                DT_BLOQUEIO_LOGIN = dataBloqueio 
+                id = id,
+                bloqueioLogin = dataBloqueio 
             });
         }
     }

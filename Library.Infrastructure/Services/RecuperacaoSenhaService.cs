@@ -1,8 +1,9 @@
 ﻿using System.Text;
 using Library.Domain.Entities;
-using Library.Domain.Services;
 using Library.Domain.Interfaces;
 using System.Security.Cryptography;
+using Library.Domain.Interfaces.Auth;
+using Library.Domain.Services.Auth;
 
 namespace Library.Infrastructure.Services {
     public class RecuperacaoSenhaService : IRecuperacaoSenhaService {

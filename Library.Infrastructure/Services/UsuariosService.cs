@@ -2,106 +2,65 @@
 using Library.Domain.Entities;
 using Library.Domain.Interfaces;
 using Library.Domain.DTOs.Usuarios;
+using Library.Domain.Interfaces.Auth;
 
-namespace Library.Infrastructure.Services; 
-public class UsuariosService : IUsuariosService {
-    private readonly IUsuariosRepository _repository;
-    private readonly IPasswordHasher _passwordHasher;
+namespace Library.Infrastructure.Services { 
+    public class UsuariosService : ServiceBase<Usuarios, PostRequest, PutRequest>, IUsuariosService {
+        private readonly IUsuariosRepository _repository;
+        private readonly IPasswordHasher _passwordHasher;
 
-    public UsuariosService(IUsuariosRepository repository, IPasswordHasher passwordHasher) {
-        _repository = repository;
-        _passwordHasher = passwordHasher;
-    }
-
-    public async Task<IEnumerable<UsuarioResponse>> ObterTodosAsync() {
-        var usuarios = await _repository.ObterTodosAsync();
-
-        return usuarios.Select(MapearParaResponse);
-    }
-
-    public async Task<UsuarioResponse?> ObterPorIdAsync(int id) {
-        if (id <= 0) {
-            return null;
+        public UsuariosService(IUsuariosRepository repository, IPasswordHasher passwordHasher) : base(repository) {
+            _repository = repository;
+            _passwordHasher = passwordHasher;
         }
 
-        var usuario = await _repository.ObterPorIdAsync(id);
-
-        if (usuario is null) {
-            return null;
+        protected override Usuarios MapearParaCriacao(PostRequest request) {
+            return new Usuarios {
+                descricao = request.descricao,
+                login = request.login,
+                email = request.email,
+                senha = request.senha,
+                perfil = request.perfil,
+                avatar = request.avatar,
+                administrador = request.administrador,
+                tentativasLogin = request.tentativasLogin,
+                bloqueioLogin = request.bloqueioLogin,
+                observacoes = request.observacoes,
+                ativo = request.ativo,
+                cadastro = DateTime.Now
+            };
         }
 
-        return MapearParaResponse(usuario);
-    }
+        protected override Usuarios MapearParaAtualizacao(int id, PutRequest request, Usuarios existente) {
+            existente.descricao = request.descricao;
+            existente.login = request.login;
+            existente.email = request.email;
+            existente.senha = request.senha;
+            existente.perfil = request.perfil;
+            existente.avatar = request.avatar;
+            existente.administrador = request.administrador;
+            existente.tentativasLogin = request.tentativasLogin;
+            existente.bloqueioLogin = request.bloqueioLogin;
+            existente.observacoes = request.observacoes;
+            existente.ativo = request.ativo;
+            existente.atualizacao = DateTime.Now;
 
-    public async Task<int> CriarAsync(PostRequest request) {
-        if (string.IsNullOrWhiteSpace(request.DS_USUARIO)) {
-            throw new ArgumentException("O nome do usuário é obrigatório.");
+            return existente;
         }
 
-        if (string.IsNullOrWhiteSpace(request.DS_SENHA)) {
-            throw new ArgumentException("A senha é obrigatória.");
+        private static UsuarioResponse MapearParaResponse(Usuarios usuario) {
+            return new UsuarioResponse {
+                id = usuario.id,
+                descricao = usuario.descricao,
+                login = usuario.login,
+                email = usuario.email,
+                perfil = usuario.perfil,
+                observacoes = usuario.observacoes,
+                ativo = usuario.ativo,
+                administrador = usuario.administrador,
+                cadastro = usuario.cadastro,
+                atualizacao = usuario.atualizacao
+            };
         }
-
-        var senhaHash = _passwordHasher.Hash(request.DS_SENHA);
-
-        var usuario = new Usuarios() {
-            DS_USUARIO = request.DS_USUARIO.Trim(),
-            DS_LOGIN = request.DS_LOGIN,
-            DS_EMAIL = request.DS_EMAIL,
-            DS_SENHA = senhaHash,
-            DS_OBSERVACOES = request.DS_OBSERVACOES,
-            X_ADMINISTRADOR = request.X_ADMINISTRADOR,
-            X_ATIVO = request.X_ATIVO,
-            DT_CADASTRO = DateTime.Now,
-            DT_ATUALIZACAO = DateTime.Now
-        };
-
-        return await _repository.CriarAsync(usuario);
-    }
-
-    public async Task<bool> AtualizarAsync(int id, PutRequest request) {
-        if (id <= 0) {
-            throw new ArgumentException("ID inválido.");
-        }
-
-        if (string.IsNullOrWhiteSpace(request.DS_USUARIO)) {
-            throw new ArgumentException("O nome do usuário é obrigatório.");
-        }
-
-        var usuario = new Usuarios() {
-            CD_USUARIO = id,
-            DS_USUARIO = request.DS_USUARIO.Trim(),
-            DS_LOGIN = request.DS_LOGIN,
-            DS_EMAIL = request.DS_EMAIL,
-            DS_SENHA = request.DS_SENHA,
-            DS_OBSERVACOES = request.DS_OBSERVACOES,
-            X_ADMINISTRADOR = request.X_ADMINISTRADOR,
-            X_ATIVO = request.X_ATIVO,
-            DT_ATUALIZACAO = DateTime.Now
-        };
-
-        return await _repository.AtualizarAsync(usuario);
-    }
-
-    public async Task<bool> ExcluirAsync(int id) {
-        if (id <= 0) {
-            return false;
-        }
-
-        return await _repository.ExcluirAsync(id);
-    }
-
-    private static UsuarioResponse MapearParaResponse(Usuarios usuario) {
-        return new UsuarioResponse {
-            CD_USUARIO = usuario.CD_USUARIO,
-            DS_USUARIO = usuario.DS_USUARIO,
-            DS_LOGIN = usuario.DS_LOGIN,
-            DS_EMAIL = usuario.DS_EMAIL,
-            DS_OBSERVACOES = usuario.DS_OBSERVACOES,
-            X_ATIVO = usuario.X_ATIVO,
-            X_ADMINISTRADOR = usuario.X_ADMINISTRADOR,
-            DT_CADASTRO = usuario.DT_CADASTRO,
-            DT_ATUALIZACAO = usuario.DT_ATUALIZACAO
-        };
     }
 }

@@ -4,108 +4,55 @@ using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 
 namespace Library.Infrastructure.Repositories {
-    public class CategoriasRepository : ICategoriasRepository {
-        private readonly DatabaseConnection _database;
+    public class CategoriasRepository : RepositoryBase<Categorias>, ICategoriasRepository {
+        protected override string TableName => "Categorias";
+        protected override string PrimaryKeyColumn => "id";
 
-        public CategoriasRepository(DatabaseConnection database) {
-            _database = database;
-        }
+        public CategoriasRepository(DatabaseConnection database) : base(database) { }
 
-        public async Task<IEnumerable<Categorias>> ObterTodosAsync() {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                SELECT
-                    CD_CATEGORIA 	
-                    , DS_CATEGORIA	
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 	
-                FROM 
-                    TBL_CATEGORIAS
-                ORDER BY 
-                    DS_CATEGORIA
-            ";
-
-            return await connection.QueryAsync<Categorias>(sql);
-        }
-
-        public async Task<Categorias?> ObterPorIdAsync(int id) {
-            using var connection = _database.CreateConnection();
+        public override async Task<int> CriarAsync(Categorias categoria) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
-                SELECT
-                    CD_CATEGORIA 	
-                    , DS_CATEGORIA	
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 	
-                FROM 
-                    TBL_CATEGORIAS
-                WHERE 
-                    CD_CATEGORIA = @CD_CATEGORIA
-            ";
-
-            return await connection.QueryFirstOrDefaultAsync<Categorias>(sql, new { CD_CATEGORIA = id });
-        }
-
-        public async Task<int> CriarAsync(Categorias categorias) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                INSERT INTO TBL_CATEGORIAS
+                INSERT INTO Categorias
                 (
-                    DS_CATEGORIA 	
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO
+                    descricao
+                    , observacoes
+                    , ativo
+                    , cadastro
+                    , atualizacao
                 )
                 VALUES
                 (
-                    @DS_CATEGORIA 	
-                    , @DS_OBSERVACOES 	
-                    , @X_ATIVO 		
-                    , @DT_CADASTRO 	
-                    , @DT_ATUALIZACAO
+                    @descricao
+                    , @observacoes
+                    , @ativo
+                    , @cadastro
+                    , @atualizacao
                 );
+
+                SELECT CAST(SCOPE_IDENTITY() AS INT);
             ";
 
-            return await connection.ExecuteScalarAsync<int>(sql, categorias);
+            return await connection.ExecuteScalarAsync<int>(sql, categoria);
         }
 
-        public async Task<bool> AtualizarAsync(Categorias categorias) {
-            using var connection = _database.CreateConnection();
+        public override async Task<bool> AtualizarAsync(Categorias categoria) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
-                UPDATE 
-                    TBL_CATEGORIAS
+                UPDATE Categorias
                 SET
-                    DS_CATEGORIA = @DS_CATEGORIA
-                    , DS_OBSERVACOES = @DS_OBSERVACOES 	
-                    , X_ATIVO = @X_ATIVO	
-                    , DT_ATUALIZACAO = @DT_ATUALIZACAO
-                WHERE 
-                    CD_CATEGORIA = @CD_CATEGORIA
+                    descricao = @descricao
+                    , observacoes = @observacoes
+                    , ativo = @ativo
+                    , cadastro = @cadastro
+                    , atualizacao = @atualizacao
+                WHERE
+                    id = @id
             ";
 
-            var linhas = await connection.ExecuteAsync(sql, categorias);
-
-            return linhas > 0;
-        }
-
-        public async Task<bool> ExcluirAsync(int id) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                DELETE FROM TBL_CATEGORIAS
-                WHERE CD_CATEGORIA = @CD_CATEGORIA
-            ";
-
-            var linhas = await connection.ExecuteAsync(sql, new { CD_CATEGORIA = id });
-
+            var linhas = await connection.ExecuteAsync(sql, categoria);
             return linhas > 0;
         }
     }

@@ -1,23 +1,10 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Library.Domain.Entities {
+﻿namespace Library.Domain.Entities {
     public class Categorias {
-        [JsonPropertyName("cdCategoria")]
-        public int CD_CATEGORIA { get; set; }
-
-        [JsonPropertyName("dsCategoria")]
-        public string DS_CATEGORIA { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsObservacoes")]
-        public string? DS_OBSERVACOES { get; set; }
-
-        [JsonPropertyName("xAtivo")]
-        public bool X_ATIVO { get; set; }
-
-        [JsonPropertyName("dtCadastro")]
-        public DateTime DT_CADASTRO { get; set; }
-
-        [JsonPropertyName("dtAtualizacao")]
-        public DateTime? DT_ATUALIZACAO { get; set; }
+        public int id { get; set; }
+        public string descricao { get; set; } = string.Empty;
+        public string? observacoes { get; set; }
+        public bool ativo { get; set; }
+        public DateTime cadastro { get; set; }
+        public DateTime? atualizacao { get; set; }
     }
 }

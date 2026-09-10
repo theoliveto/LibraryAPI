@@ -1,5 +1,5 @@
 ﻿using Library.Domain.DTOs.Auth;
-using Library.Domain.Services;
+using Library.Domain.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers {

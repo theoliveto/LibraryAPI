@@ -4,138 +4,70 @@ using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 
 namespace Library.Infrastructure.Repositories {
-    public class AutoresRepository : IAutorRepository {
-        private readonly DatabaseConnection _database;
+    public class AutoresRepository : RepositoryBase<Autores>, IAutoresRepository {
+        protected override string TableName => "Autores";
+        protected override string PrimaryKeyColumn => "id";
 
-        public AutoresRepository(DatabaseConnection database) {
-            _database = database;
-        }
+        public AutoresRepository(DatabaseConnection database) : base(database) { }
 
-        public async Task<IEnumerable<Autor>> ObterTodosAsync() {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                SELECT
-                    CD_AUTOR 	
-                    , DS_AUTOR 	
-                    , DT_NASCIMENTO 		
-                    , DT_FALECIMENTO 	
-                    , DS_PAIS 
-                    , DS_GENERO
-                    , DS_SITEOFICIAL 
-                    , IM_FOTO
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO 	
-                FROM 
-                    TBL_AUTORES
-                ORDER BY 
-                    DS_AUTOR
-            ";
-
-            return await connection.QueryAsync<Autor>(sql);
-        }
-
-        public async Task<Autor?> ObterPorIdAsync(int id) {
-            using var connection = _database.CreateConnection();
+        public override async Task<int> CriarAsync(Autores autor) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
-                SELECT
-                    CD_AUTOR 	
-                    , DS_AUTOR 	
-                    , DT_NASCIMENTO 		
-                    , DT_FALECIMENTO 	
-                    , DS_PAIS 
-                    , DS_GENERO
-                    , DS_SITEOFICIAL 
-                    , IM_FOTO
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO	
-                FROM 
-                    TBL_AUTORES
-                WHERE 
-                    CD_AUTOR = @CD_AUTOR
-            ";
-
-            return await connection.QueryFirstOrDefaultAsync<Autor>(sql, new { CD_AUTOR = id });
-        }
-
-        public async Task<int> CriarAsync(Autor autor) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                INSERT INTO TBL_AUTORES
+                INSERT INTO Autores
                 (
-                    DS_AUTOR 	
-                    , DT_NASCIMENTO 		
-                    , DT_FALECIMENTO 	
-                    , DS_PAIS 
-                    , DS_GENERO
-                    , DS_SITEOFICIAL 
-                    , IM_FOTO
-                    , DS_OBSERVACOES 	
-                    , X_ATIVO 		
-                    , DT_CADASTRO 	
-                    , DT_ATUALIZACAO
+                    descricao
+                    , nascimento
+                    , falecimento
+                    , nacionalidade
+                    , genero
+                    , siteOficial
+                    , observacoes
+                    , ativo
+                    , cadastro
+                    , atualizacao
                 )
                 VALUES
                 (
-                    @DS_AUTOR 	
-                    , @DT_NASCIMENTO 		
-                    , @DT_FALECIMENTO 	
-                    , @DS_PAIS 
-                    , @DS_GENERO
-                    , @DS_SITEOFICIAL 
-                    , @IM_FOTO
-                    , @DS_OBSERVACOES 	
-                    , @X_ATIVO 		
-                    , @DT_CADASTRO 	
-                    , @DT_ATUALIZACAO
+                    @descricao
+                    , @nascimento
+                    , @falecimento
+                    , @nacionalidade
+                    , @genero
+                    , @siteOficial
+                    , @observacoes
+                    , @ativo
+                    , @cadastro
+                    , @atualizacao
                 );
+
+                SELECT CAST(SCOPE_IDENTITY() AS INT);
             ";
 
             return await connection.ExecuteScalarAsync<int>(sql, autor);
         }
 
-        public async Task<bool> AtualizarAsync(Autor autor) {
-            using var connection = _database.CreateConnection();
+        public override async Task<bool> AtualizarAsync(Autores autor) {
+            using var connection = Database.CreateConnection();
 
             const string sql = @"
-                UPDATE 
-                    TBL_AUTORES
+                UPDATE Autores
                 SET
-                    DS_AUTOR = @DS_AUTOR	
-                    , DT_NASCIMENTO = @DT_NASCIMENTO		
-                    , DT_FALECIMENTO = @DT_FALECIMENTO 	
-                    , DS_PAIS = @DS_PAIS 
-                    , DS_GENERO = @DS_GENERO
-                    , DS_SITEOFICIAL = @DS_SITEOFICIAL 
-                    , IM_FOTO = @IM_FOTO
-                    , DS_OBSERVACOES = @DS_OBSERVACOES 	
-                    , X_ATIVO = @X_ATIVO	
-                    , DT_ATUALIZACAO = @DT_ATUALIZACAO
-                WHERE 
-                    CD_AUTOR = @CD_AUTOR
+                    descricao = @descricao
+                    , nascimento = @nascimento
+                    , falecimento = @falecimento
+                    , nacionalidade = @nacionalidade
+                    , genero = @genero
+                    , siteOficial = @siteOficial
+                    , observacoes = @observacoes
+                    , ativo = @ativo
+                    , cadastro = @cadastro
+                    , atualizacao = @atualizacao
+                WHERE
+                    id = @id
             ";
 
             var linhas = await connection.ExecuteAsync(sql, autor);
-
-            return linhas > 0;
-        }
-
-        public async Task<bool> ExcluirAsync(int id) {
-            using var connection = _database.CreateConnection();
-
-            const string sql = @"
-                DELETE FROM TBL_AUTORES
-                WHERE CD_AUTOR = @CD_AUTOR
-            ";
-
-            var linhas = await connection.ExecuteAsync(sql, new { CD_AUTOR = id });
-
             return linhas > 0;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Library.Domain.Entities;
-using Library.Domain.Interfaces;
+using Library.Domain.Entities.Auth;
+using Library.Domain.Interfaces.Auth;
 using Library.Infrastructure.Data;
 
 namespace Library.Infrastructure.Repositories {

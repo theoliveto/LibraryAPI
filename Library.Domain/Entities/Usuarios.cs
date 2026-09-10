@@ -1,41 +1,18 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Library.Domain.Entities { 
+﻿namespace Library.Domain.Entities { 
     public class Usuarios {
-        [JsonPropertyName("cdUsuario")]
-        public int CD_USUARIO { get; set; }
-
-        [JsonPropertyName("dsUsuario")]
-        public string DS_USUARIO { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsLogin")]
-        public string DS_LOGIN { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsEmail")]
-        public string DS_EMAIL { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsSenha")]
-        public string DS_SENHA { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsObservacoes")]
-        public string? DS_OBSERVACOES { get; set; }
-
-        [JsonPropertyName("xAtivo")]
-        public bool X_ATIVO { get; set; }
-
-        [JsonPropertyName("xAdministrador")]
-        public bool X_ADMINISTRADOR { get; set; }
-
-        [JsonPropertyName("dtCadastro")]
-        public DateTime DT_CADASTRO { get; set; }
-
-        [JsonPropertyName("dtAtualizacao")]
-        public DateTime? DT_ATUALIZACAO { get; set; }
-        
-        [JsonPropertyName("nrTentativasLogin")]
-        public int NR_TENTATIVAS_LOGIN { get; set; }
-
-        [JsonPropertyName("dtBloqueioLogin")]
-        public DateTime? DT_BLOQUEIO_LOGIN { get; set; }
+        public int id { get; set; }
+        public string descricao { get; set; } = string.Empty;
+        public string login { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string senha { get; set; } = string.Empty;
+        public string perfil { get; set; } = string.Empty;
+        public byte[]? avatar { get; set; }
+        public bool administrador { get; set; }
+        public int tentativasLogin { get; set; }
+        public DateTime? bloqueioLogin { get; set; }
+        public string? observacoes { get; set; }
+        public bool ativo { get; set; }
+        public DateTime cadastro { get; set; }
+        public DateTime? atualizacao { get; set; }
     }
 }

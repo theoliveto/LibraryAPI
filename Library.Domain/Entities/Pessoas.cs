@@ -1,59 +1,25 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Library.Domain.Entities {
+﻿namespace Library.Domain.Entities {
     public class Pessoas {
-        [JsonPropertyName("cdPessoa")]
-        public int CD_PESSOA { get; set; }
-
-        [JsonPropertyName("dsPessoa")]
-        public string DS_PESSOA { get; set; } = string.Empty;
-
-        [JsonPropertyName("nrCpf")]
-        public string NR_CPF { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsEmail")]
-        public string DS_EMAIL { get; set; } = string.Empty;
-
-        [JsonPropertyName("nrTelefone")]
-        public string NR_TELEFONE { get; set; } = string.Empty;
-
-        [JsonPropertyName("dtNascimento")]
-        public DateTime DT_NASCIMENTO { get; set; }
-
-        [JsonPropertyName("dsGenero")]
-        public string DS_GENERO { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsObservacoes")]
-        public string? DS_OBSERVACOES { get; set; }
-
-        [JsonPropertyName("nrCep")]
-        public string NR_CEP { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsEndereco")]
-        public string DS_ENDERECO { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsCidade")]
-        public string DS_CIDADE { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsEstado")]
-        public string DS_ESTADO { get; set; } = string.Empty;
-
-        [JsonPropertyName("dsBairro")]
-        public string DS_BAIRRO { get; set; } = string.Empty;
-
-        [JsonPropertyName("nrNumero")]
-        public string? NR_NUMERO { get; set; }
-
-        [JsonPropertyName("dsComplemento")]
-        public string? DS_COMPLEMENTO { get; set; }
-
-        [JsonPropertyName("xAtivo")]
-        public bool X_ATIVO { get; set; }
-
-        [JsonPropertyName("dtCadastro")]
-        public DateTime DT_CADASTRO { get; set; }
-
-        [JsonPropertyName("dtAtualizacao")]
-        public DateTime? DT_ATUALIZACAO { get; set; }
+        public int id { get; set; }
+        public string descricao { get; set; } = string.Empty;
+        public string? razaoSocial { get; set; }
+        public int usuarioId { get; set; }
+        public string cpfCnpj { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string celular { get; set; } = string.Empty;
+        public string? telefone { get; set; }
+        public DateTime nascimento { get; set; }
+        public string genero { get; set; } = string.Empty;
+        public string cep { get; set; } = string.Empty;
+        public string endereco { get; set; } = string.Empty;
+        public string cidade { get; set; } = string.Empty;
+        public string estado { get; set; } = string.Empty;
+        public string bairro { get; set; } = string.Empty;
+        public string? numero { get; set; }
+        public string? complemento { get; set; }
+        public string? observacoes { get; set; }
+        public bool ativo { get; set; }
+        public DateTime cadastro { get; set; }
+        public DateTime? atualizacao { get; set; }
     }
 }

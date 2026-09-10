@@ -1,18 +1,25 @@
-using System.Text;
-using System.Reflection;
-using Microsoft.OpenApi;
 using FluentMigrator.Runner;
-using Library.Domain.Services;
 using Library.Domain.Interfaces;
+using Library.Domain.Interfaces.Auth;
+using Library.Domain.Services;
+using Library.Domain.Services.Auth;
 using Library.Infrastructure.Data;
-using Microsoft.IdentityModel.Tokens;
-using Library.Infrastructure.Services;
 using Library.Infrastructure.Repositories;
+using Library.Infrastructure.Services;
+using Library.Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("A chave JWT não foi configurada.");
 
