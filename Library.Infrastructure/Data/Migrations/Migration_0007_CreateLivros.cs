@@ -21,19 +21,19 @@ namespace Library.Infrastructure.Data.Migrations {
                 .WithColumn("imagemCapa").AsByte().Nullable()
                 .ComCamposAuditoria();
 
-            Create.ForeignKey("FK_Livros_LivroId")
+            Create.ForeignKey("FK_Livros_AutorId")
                 .FromTable("Livros")
                 .ForeignColumn("autorId")
                 .ToTable("Autores")
                 .PrimaryColumn("id");
 
-            Create.ForeignKey("FK_Livros_LivroId")
+            Create.ForeignKey("FK_Livros_EditoraId")
                 .FromTable("Livros")
                 .ForeignColumn("editoraId")
                 .ToTable("Editoras")
                 .PrimaryColumn("id");
 
-            Create.ForeignKey("FK_Livros_LivroId")
+            Create.ForeignKey("FK_Livros_CategoriaId")
                 .FromTable("Livros")
                 .ForeignColumn("categoriaId")
                 .ToTable("Categorias")

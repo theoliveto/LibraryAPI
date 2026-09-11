@@ -1,7 +1,7 @@
 ﻿using Dapper;
+using Library.Infrastructure.Data;
 using Library.Domain.Entities.Auth;
 using Library.Domain.Interfaces.Auth;
-using Library.Infrastructure.Data;
 
 namespace Library.Infrastructure.Repositories {
     public class RecuperacaoSenhaRepository : IRecuperacaoSenhaRepository {
@@ -15,19 +15,19 @@ namespace Library.Infrastructure.Repositories {
             using var connection = _database.CreateConnection();
 
             const string sql = @"
-                INSERT INTO TBL_RECUPERACAO_SENHA
+                INSERT INTO RecuperacaoSenha
                 (
-                    CD_USUARIO,
-                    DS_TOKEN,
-                    DT_EXPIRACAO,
-                    DT_CADASTRO
+                    usuarioId
+                    , token
+                    , expiracao
+                    , cadastro
                 )
                 VALUES
                 (
-                    @CD_USUARIO,
-                    @DS_TOKEN,
-                    @DT_EXPIRACAO,
-                    @DT_CADASTRO
+                    @usuarioId
+                    , @token
+                    , @expiracao
+                    , @cadastro
                 );
 
                 SELECT CAST(SCOPE_IDENTITY() AS INT);
@@ -41,19 +41,19 @@ namespace Library.Infrastructure.Repositories {
 
             const string sql = @"
                 SELECT
-                    CD_RECUPERACAO,
-                    CD_USUARIO,
-                    DS_TOKEN,
-                    DT_EXPIRACAO,
-                    DT_UTILIZACAO,
-                    DT_CADASTRO
+                    id
+                    , usuarioId
+                    , token
+                    , expiracao
+                    , utilizacao
+                    , cadastro
                 FROM
-                    TBL_RECUPERACAO_SENHA
+                    RecuperacaoSenha
                 WHERE
-                    DS_TOKEN = @DS_TOKEN
+                    token = @token
             ";
 
-            return await connection.QueryFirstOrDefaultAsync<RecuperacaoSenha>(sql, new { DS_TOKEN = token });
+            return await connection.QueryFirstOrDefaultAsync<RecuperacaoSenha>(sql, new { token = token });
         }
 
         public async Task<bool> MarcarComoUtilizadoAsync(int id) {
@@ -61,20 +61,17 @@ namespace Library.Infrastructure.Repositories {
 
             const string sql = @"
                 UPDATE
-                    TBL_RECUPERACAO_SENHA
+                    RecuperacaoSenha
                 SET
-                    DT_UTILIZACAO = @DT_UTILIZACAO
+                    utilizacao = @utilizacao
                 WHERE
-                    CD_RECUPERACAO = @CD_RECUPERACAO
-                    AND DT_UTILIZACAO IS NULL
+                    id = @id
+                    AND utilizacao IS NULL
             ";
 
             var linhas = await connection.ExecuteAsync(
                 sql,
-                new {
-                    CD_RECUPERACAO = id,
-                    DT_UTILIZACAO = DateTime.Now
-                }
+                new { id = id, utilizacao = DateTime.Now }
             );
 
             return linhas > 0;
@@ -85,20 +82,17 @@ namespace Library.Infrastructure.Repositories {
 
             const string sql = @"
                 UPDATE
-                    TBL_RECUPERACAO_SENHA
+                    RecuperacaoSenha
                 SET
-                    DT_UTILIZACAO = @DT_UTILIZACAO
+                    utilizacao = @utilizacao
                 WHERE
-                    CD_USUARIO = @CD_USUARIO
-                    AND DT_UTILIZACAO IS NULL
+                    id = @id
+                    AND utilizacao IS NULL
             ";
 
             await connection.ExecuteAsync(
                 sql,
-                new {
-                    CD_USUARIO = cdUsuario,
-                    DT_UTILIZACAO = DateTime.Now
-                }
+                new { id = cdUsuario, utilizacao = DateTime.Now }
             );
         }
     }
