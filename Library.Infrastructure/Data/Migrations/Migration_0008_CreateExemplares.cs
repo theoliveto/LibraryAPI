@@ -7,7 +7,7 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0008_CreateExemplares : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Exemplares"))
-                .ComCamposBase("Exemplares")
+                .WithColumn("id").AsInt32().PrimaryKey("PK_Exemplares_Id").Identity()
                 .WithColumn("livroId").AsInt32().NotNullable()
                 .WithColumn("patrimonio").AsString(50).NotNullable()
                 .WithColumn("localizacao").AsString(100).Nullable()

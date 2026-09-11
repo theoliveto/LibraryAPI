@@ -1,7 +1,6 @@
 ﻿namespace Library.Domain.Entities {
     public class Exemplares {
         public int id { get; set; }
-        public string descricao { get; set; } = string.Empty;
         public int livroId { get; set; }
         public string patrimonio { get; set; } = string.Empty;
         public string? localizacao { get; set; }

@@ -1,6 +1,5 @@
 ﻿namespace Library.Domain.DTOs.Exemplares {
     public class PostRequest {
-        public string descricao { get; set; } = string.Empty;
         public int livroId { get; set; }
         public string patrimonio { get; set; } = string.Empty;
         public string? localizacao { get; set; }

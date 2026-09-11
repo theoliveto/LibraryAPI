@@ -9,7 +9,6 @@ namespace Library.Infrastructure.Services {
 
         protected override Exemplares MapearParaCriacao(PostRequest request) {
             return new Exemplares {
-                descricao = request.descricao,
                 livroId = request.livroId,
                 patrimonio = request.patrimonio,
                 localizacao = request.localizacao,
@@ -24,7 +23,6 @@ namespace Library.Infrastructure.Services {
         }
 
         protected override Exemplares MapearParaAtualizacao(int id, PutRequest request, Exemplares existente) {
-            existente.descricao = request.descricao;
             existente.livroId = request.livroId;
             existente.patrimonio = request.patrimonio;
             existente.localizacao = request.localizacao;

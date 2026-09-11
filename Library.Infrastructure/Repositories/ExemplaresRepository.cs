@@ -16,8 +16,7 @@ namespace Library.Infrastructure.Repositories {
             const string sql = @"
                 INSERT INTO Exemplares
                 (
-                    descricao
-                    , livroId
+                    livroId
                     , patrimonio
                     , localizacao
                     , ean
@@ -31,8 +30,7 @@ namespace Library.Infrastructure.Repositories {
                 )
                 VALUES
                 (
-                    @descricao
-                    , @livroId
+                    @livroId
                     , @patrimonio
                     , @localizacao
                     , @ean
@@ -57,8 +55,7 @@ namespace Library.Infrastructure.Repositories {
             const string sql = @"
                 UPDATE Exemplares
                 SET
-                    descricao = @descricao
-                    , livroId = @livroId
+                    livroId = @livroId
                     , patrimonio = @patrimonio
                     , localizacao = @localizacao
                     , ean = @ean
