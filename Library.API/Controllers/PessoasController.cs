@@ -1,86 +1,24 @@
-﻿using Library.Domain.Services;
+﻿using Library.Domain.Entities;
+using Library.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Library.Domain.DTOs.Pessoas;
-using Microsoft.AspNetCore.Authorization;
 
-namespace Library.API.Controllers;
+namespace Library.API.Controllers { 
+    public class PessoasController : ApiControllerBase<Pessoas, PostRequest, PutRequest> {
+        private readonly IPessoasService _service;
 
-[ApiController]
-[Route("api/[controller]")]
-[Authorize]
-public class PessoasController : ControllerBase {
-    private readonly IPessoasService _service;
-
-    public PessoasController(IPessoasService service) {
-        _service = service;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> ObterTodos() {
-        var pessoas = await _service.ObterTodosAsync();
-
-        return Ok(pessoas);
-    }
-
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> ObterPorId(int id) {
-        var pessoa = await _service.ObterPorIdAsync(id);
-
-        if (pessoa == null) {
-            return NotFound(new { mensagem = "Pessoa não encontrada." });
+        public PessoasController(IPessoasService service) : base(service) {
+            _service = service;
         }
 
-        return Ok(pessoa);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Criar(PostRequest request) {
-        try {
-            var id = await _service.CriarAsync(request);
-
-            var pessoa = await _service.ObterPorIdAsync(id);
-
-            return CreatedAtAction(nameof(ObterPorId), new { id }, pessoa);
-
-        } catch(ArgumentException ex) {
-            return BadRequest(new { mensagem = ex.Message });
-        }
-    }
-
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Atualizar(int id, PutRequest request) {
-        try {
-            var atualizado = await _service.AtualizarAsync(id,request);
-
-            if (!atualizado) {
-                return NotFound(new { mensagem = "Pessoa não encontrada." });
-            }
-
-            return NoContent();
-
-        } catch (ArgumentException ex) {
-            return BadRequest(new { mensagem = ex.Message });
-        }
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Excluir(int id) {
-        var excluido = await _service.ExcluirAsync(id);
-
-        if (!excluido) {
-            return NotFound(new { mensagem = "Pessoa não encontrada." });
+        [HttpGet("verificar-cpf/{cpf}")]
+        public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
+            return await _service.VerificarCpfAsync(cpf, cdPessoa);
         }
 
-        return NoContent();
-    }
-
-    [HttpGet("verificar-cpf/{cpf}")]
-    public async Task<bool> VerificarCpfAsync(string cpf, int? cdPessoa) {
-        return await _service.VerificarCpfAsync(cpf, cdPessoa);
-    }
-
-    [HttpGet("verificar-email/{email}")]
-    public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
-        return await _service.VerificarEmailAsync(email, cdPessoa);
+        [HttpGet("verificar-email/{email}")]
+        public async Task<bool> VerificarEmailAsync(string email, int? cdPessoa) {
+            return await _service.VerificarEmailAsync(email, cdPessoa);
+        }
     }
 }

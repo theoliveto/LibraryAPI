@@ -7,9 +7,9 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0006_CreateEditoras : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Editoras"))
-                .ComCamposBase()
+                .ComCamposBase("Editoras")
                 .WithColumn("razaoSocial").AsString(200).NotNullable()
-                .ComCamposDadosBasicos()
+                .ComCamposDadosBasicos("Editoras")
                 .WithColumn("nacionalidade").AsString(50).NotNullable()
                 .WithColumn("siteOficial").AsString(100).NotNullable()
                 .WithColumn("fundacao").AsDateTime().NotNullable()

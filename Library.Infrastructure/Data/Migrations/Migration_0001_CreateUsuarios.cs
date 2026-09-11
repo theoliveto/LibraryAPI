@@ -7,7 +7,7 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0001_CreateUsuarios : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Usuarios"))
-                .ComCamposBase()
+                .ComCamposBase("Usuarios")
                 .WithColumn("login").AsString(30).NotNullable().Unique("UK_Usuarios_Login")
                 .WithColumn("email").AsString(100).NotNullable().Unique("UK_Usuarios_Email")
                 .WithColumn("senha").AsString(200).NotNullable()

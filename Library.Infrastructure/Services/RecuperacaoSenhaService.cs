@@ -4,6 +4,7 @@ using Library.Domain.Interfaces;
 using System.Security.Cryptography;
 using Library.Domain.Interfaces.Auth;
 using Library.Domain.Services.Auth;
+using Library.Domain.Entities.Auth;
 
 namespace Library.Infrastructure.Services {
     public class RecuperacaoSenhaService : IRecuperacaoSenhaService {
@@ -32,19 +33,19 @@ namespace Library.Infrastructure.Services {
 
             if (usuario is null) return;
 
-            if (!usuario.X_ATIVO) return;
+            if (!usuario.ativo) return;
 
-            await _passwordResetRepository.InvalidarTokensAnterioresAsync(usuario.CD_USUARIO);
+            await _passwordResetRepository.InvalidarTokensAnterioresAsync(usuario.id);
 
             var token = GerarToken();
 
             var tokenHash = GerarHashToken(token);
 
             var recuperacao = new RecuperacaoSenha {
-                CD_USUARIO = usuario.CD_USUARIO,
-                DS_TOKEN = tokenHash,
-                DT_EXPIRACAO = DateTime.Now.AddMinutes(30),
-                DT_CADASTRO = DateTime.Now
+                usuarioId = usuario.id,
+                token = tokenHash,
+                expiracao = DateTime.Now.AddMinutes(30),
+                cadastro = DateTime.Now
             };
 
             await _passwordResetRepository.CriarAsync(recuperacao);
@@ -85,7 +86,7 @@ namespace Library.Infrastructure.Services {
                                         <tr>
                                             <td style=""padding:32px 36px; color:#1f2d3d;"">
                                                 <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
-                                                    Olá, <strong>{usuario.DS_USUARIO}</strong>.
+                                                    Olá, <strong>{usuario.descricao}</strong>.
                                                 </p>
 
                                                 <p style=""margin:0 0 16px; font-size:15px; line-height:1.6;"">
@@ -130,7 +131,7 @@ namespace Library.Infrastructure.Services {
                 </html>
             ";
 
-            await _emailService.EnviarAsync(usuario.DS_EMAIL, assunto, corpo);
+            await _emailService.EnviarAsync(usuario.email, assunto, corpo);
         }
 
         public async Task<bool> ValidarTokenAsync(string token) {
@@ -144,9 +145,9 @@ namespace Library.Infrastructure.Services {
 
             if (recuperacao is null) return false;
 
-            if (recuperacao.DT_UTILIZACAO.HasValue) return false;
+            if (recuperacao.utilizacao.HasValue) return false;
 
-            if (recuperacao.DT_EXPIRACAO <= DateTime.Now) return false;
+            if (recuperacao.expiracao <= DateTime.Now) return false;
 
             return true;
         }
@@ -172,22 +173,22 @@ namespace Library.Infrastructure.Services {
                 return false;
             }
 
-            if (recuperacao.DT_UTILIZACAO.HasValue) {
+            if (recuperacao.utilizacao.HasValue) {
                 return false;
             }
 
-            if (recuperacao.DT_EXPIRACAO <= DateTime.Now) {
+            if (recuperacao.expiracao <= DateTime.Now) {
                 return false;
             }
 
-            var usuario = await _usuariosRepository.ObterPorIdAsync(recuperacao.CD_USUARIO);
+            var usuario = await _usuariosRepository.ObterPorIdAsync(recuperacao.usuarioId);
 
             if (usuario is null) {
                 return false;
             }
 
-            usuario.DS_SENHA = _passwordHasher.Hash(novaSenha);
-            usuario.DT_ATUALIZACAO = DateTime.Now;
+            usuario.senha = _passwordHasher.Hash(novaSenha);
+            usuario.atualizacao = DateTime.Now;
 
             var atualizado = await _usuariosRepository.AtualizarAsync(usuario);
 
@@ -195,7 +196,7 @@ namespace Library.Infrastructure.Services {
                 return false;
             }
 
-            await _passwordResetRepository.MarcarComoUtilizadoAsync(recuperacao.CD_RECUPERACAO);
+            await _passwordResetRepository.MarcarComoUtilizadoAsync(recuperacao.id);
 
             return true;
         }

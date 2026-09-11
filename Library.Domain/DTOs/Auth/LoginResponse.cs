@@ -9,6 +9,7 @@
         public string descricao { get; set; } = string.Empty;
         public string login { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
+        public string perfil { get; set; } = string.Empty;
         public bool administrador { get; set; }
     }
 }

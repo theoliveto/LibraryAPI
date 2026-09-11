@@ -7,7 +7,7 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0005_CreateCategorias : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Categorias"))
-                .ComCamposBase()
+                .ComCamposBase("Categorias")
                 .ComCamposAuditoria();
         }
         public override void Down() {

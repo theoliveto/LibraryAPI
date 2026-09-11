@@ -7,10 +7,10 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0002_CreatePessoas : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Pessoas"))
-                .ComCamposBase()
+                .ComCamposBase("Pessoas")
                 .WithColumn("razaoSocial").AsString(200).Nullable()
                 .WithColumn("usuarioId").AsInt32().NotNullable()
-                .ComCamposDadosBasicos()
+                .ComCamposDadosBasicos("Pessoas")
                 .WithColumn("nascimento").AsDateTime().NotNullable()
                 .WithColumn("genero").AsString(30).NotNullable()
                 .ComCamposEndereco()

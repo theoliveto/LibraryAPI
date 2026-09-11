@@ -7,7 +7,7 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0004_CreateAutores : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Autores"))
-                .ComCamposBase()
+                .ComCamposBase("Autores")
                 .WithColumn("nascimento").AsDateTime().NotNullable()
                 .WithColumn("falecimento").AsDateTime().Nullable()
                 .WithColumn("nacionalidade").AsString(50).NotNullable()

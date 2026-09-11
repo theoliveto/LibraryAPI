@@ -1,74 +1,9 @@
-﻿using Library.Domain.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Library.Domain.Entities;
+using Library.Domain.Services;
 using Library.Domain.DTOs.Usuarios;
 
-namespace Library.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class UsuariosController : ControllerBase {
-    private readonly IUsuariosService _service;
-
-    public UsuariosController(IUsuariosService service) {
-        _service = service;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> ObterTodos() {
-        var pessoas = await _service.ObterTodosAsync();
-
-        return Ok(pessoas);
-    }
-
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> ObterPorId(int id) {
-        var pessoa = await _service.ObterPorIdAsync(id);
-
-        if (pessoa == null) {
-            return NotFound(new { mensagem = "Pessoa não encontrada." });
-        }
-
-        return Ok(pessoa);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Criar(PostRequest request) {
-        try {
-            var id = await _service.CriarAsync(request);
-
-            var pessoa = await _service.ObterPorIdAsync(id);
-
-            return CreatedAtAction(nameof(ObterPorId), new { id }, pessoa);
-
-        } catch (ArgumentException ex) {
-            return BadRequest(new { mensagem = ex.Message });
-        }
-    }
-
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Atualizar(int id, PutRequest request) {
-        try {
-            var atualizado = await _service.AtualizarAsync(id, request);
-
-            if (!atualizado) {
-                return NotFound(new { mensagem = "Pessoa não encontrada." });
-            }
-
-            return NoContent();
-
-        } catch (ArgumentException ex) {
-            return BadRequest(new { mensagem = ex.Message });
-        }
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Excluir(int id) {
-        var excluido = await _service.ExcluirAsync(id);
-
-        if (!excluido) {
-            return NotFound(new { mensagem = "Pessoa não encontrada." });
-        }
-
-        return NoContent();
+namespace Library.API.Controllers { 
+    public class UsuariosController : ApiControllerBase<Usuarios, PostRequest, PutRequest> {
+        public UsuariosController(IUsuariosService service) : base(service) { }
     }
 }

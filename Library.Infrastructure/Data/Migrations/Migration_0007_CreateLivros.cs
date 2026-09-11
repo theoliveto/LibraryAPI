@@ -7,7 +7,7 @@ namespace Library.Infrastructure.Data.Migrations {
     public class Migration_0007_CreateLivros : Migration {
         public override void Up() {
             ((ICreateTableColumnOptionOrWithColumnSyntax)Create.Table("Livros"))
-                .ComCamposBase()
+                .ComCamposBase("Livros")
                 .WithColumn("subtitulo").AsString(200).Nullable()
                 .WithColumn("autorId").AsInt32().NotNullable()
                 .WithColumn("editoraId").AsInt32().NotNullable()

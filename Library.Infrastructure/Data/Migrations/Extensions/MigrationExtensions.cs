@@ -21,18 +21,18 @@ namespace Library.Infrastructure.Data.Migrations.Extensions {
                 .WithColumn("complemento").AsString(100).Nullable();
         }
 
-        public static ICreateTableColumnOptionOrWithColumnSyntax ComCamposBase(this ICreateTableColumnOptionOrWithColumnSyntax table) {
+        public static ICreateTableColumnOptionOrWithColumnSyntax ComCamposBase(this ICreateTableColumnOptionOrWithColumnSyntax table, string tableName) {
             return table
-                .WithColumn("id").AsInt32().PrimaryKey($"PK_{table}_Id").Identity()
-                .WithColumn("descricao").AsString(200).NotNullable().Unique($"UK_{table}_Descricao");
+                .WithColumn("id").AsInt32().PrimaryKey($"PK_{tableName}_Id").Identity()
+                .WithColumn("descricao").AsString(200).NotNullable().Unique($"UK_{tableName}_Descricao");
         }
 
-        public static ICreateTableColumnOptionOrWithColumnSyntax ComCamposDadosBasicos(this ICreateTableColumnOptionOrWithColumnSyntax table) {
+        public static ICreateTableColumnOptionOrWithColumnSyntax ComCamposDadosBasicos(this ICreateTableColumnOptionOrWithColumnSyntax table, string tableName) {
             return table
-                .WithColumn("cpfCnpj").AsString(50).NotNullable().Unique($"UK_{table}_CpfCnpj")
-                .WithColumn("email").AsString(100).NotNullable().Unique($"UK_{table}_Email")
-                .WithColumn("celular").AsString(30).NotNullable().Unique($"UK_{table}_Celular")
-                .WithColumn("telefone").AsString(30).Nullable().Unique($"UK_{table}_Telefone");
+                .WithColumn("cpfCnpj").AsString(50).NotNullable().Unique($"UK_{tableName}_CpfCnpj")
+                .WithColumn("email").AsString(100).NotNullable().Unique($"UK_{tableName}_Email")
+                .WithColumn("celular").AsString(30).NotNullable().Unique($"UK_{tableName}_Celular")
+                .WithColumn("telefone").AsString(30).Nullable().Unique($"UK_{tableName}_Telefone");
         }
     }
 }

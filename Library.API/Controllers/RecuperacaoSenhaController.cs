@@ -1,6 +1,6 @@
 ﻿using Library.Domain.DTOs.Auth;
-using Library.Domain.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Library.Domain.Services.Auth;
 
 namespace Library.API.Controllers {
     [ApiController]

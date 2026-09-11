@@ -75,21 +75,33 @@ var connectionString =
 
 builder.Services.AddSingleton(new DatabaseConnection(connectionString));
 
-builder.Services.AddScoped<IPessoasRepository, PessoasRepository>();
-builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
-builder.Services.AddScoped<IRecuperacaoSenhaRepository, RecuperacaoSenhaRepository>();
-builder.Services.AddScoped<IAutorRepository, AutoresRepository>();
+builder.Services.AddScoped<IAutoresRepository, AutoresRepository>();
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
+builder.Services.AddScoped<IEditorasRepository, EditorasRepository>();
+builder.Services.AddScoped<IEmprestimosRepository, EmprestimosRepository>();
+builder.Services.AddScoped<IExemplaresRepository, ExemplaresRepository>();
+builder.Services.AddScoped<ILivrosRepository, LivrosRepository>();
+builder.Services.AddScoped<IMultasRepository, MultasRepository>();
+builder.Services.AddScoped<IPessoasRepository, PessoasRepository>();
+builder.Services.AddScoped<IRecuperacaoSenhaRepository, RecuperacaoSenhaRepository>();
+builder.Services.AddScoped<IReservasRepository, ReservasRepository>();
+builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
 
-builder.Services.AddScoped<IPessoasService, PessoasService>();
-builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IRecuperacaoSenhaService, RecuperacaoSenhaService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IAutorService, AutoresService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IAutoresService, AutoresService>();
 builder.Services.AddScoped<ICategoriasService, CategoriasService>();
+builder.Services.AddScoped<IEditorasService, EditorasService>();
+builder.Services.AddScoped<IEmprestimosService, EmprestimosService>();
+builder.Services.AddScoped<IExemplaresService, ExemplaresService>();
+builder.Services.AddScoped<ILivrosService, LivrosService>();
+builder.Services.AddScoped<IMultasService, MultasService>();
+builder.Services.AddScoped<IPessoasService, PessoasService>();
+builder.Services.AddScoped<IRecuperacaoSenhaService, RecuperacaoSenhaService>();
+builder.Services.AddScoped<IReservasService, ReservasService>();
+builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 
 builder.Services
     .AddFluentMigratorCore()
