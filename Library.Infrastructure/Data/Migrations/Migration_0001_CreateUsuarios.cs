@@ -22,7 +22,7 @@ namespace Library.Infrastructure.Data.Migrations {
                 descricao = "Administrador",
                 login = "admin",
                 email = "oliveto.vinicius@uceff.edu.br",
-                senha = "$2a$11$sGpr37b8RWzPGMEqg3boNOCAudbE9S4oIHT1Fob3G./waorKFQbya",
+                senha = "$2a$11$ICT0EM0gm2wWCxmlkFL9F.H2zHABntuRHRgDVUFK.z5QbNnPdSaYe",
                 perfil = "Master",
                 administrador = true,
                 tentativasLogin = 0,
