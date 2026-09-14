@@ -19,7 +19,7 @@ namespace Library.Infrastructure.Services {
                 descricao = request.descricao,
                 login = request.login,
                 email = request.email,
-                senha = request.senha,
+                senha = _passwordHasher.Hash(request.senha),
                 perfil = request.perfil,
                 avatar = request.avatar,
                 administrador = request.administrador,
@@ -35,7 +35,7 @@ namespace Library.Infrastructure.Services {
             existente.descricao = request.descricao;
             existente.login = request.login;
             existente.email = request.email;
-            existente.senha = request.senha;
+            existente.senha = _passwordHasher.Hash(request.senha);
             existente.perfil = request.perfil;
             existente.avatar = request.avatar;
             existente.administrador = request.administrador;

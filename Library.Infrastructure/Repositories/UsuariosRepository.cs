@@ -18,8 +18,10 @@ namespace Library.Infrastructure.Repositories {
                 (
                     descricao 	
                     , login 	
-                    , email 		
+                    , email 	
+                    , senha
                     , perfil 	
+                    , avatar
                     , administrador 		
                     , tentativasLogin 	
                     , bloqueioLogin
@@ -32,11 +34,13 @@ namespace Library.Infrastructure.Repositories {
                 (
                     @descricao 	
                     , @login 	
-                    , @email 		
+                    , @email 	
+                    , @senha
                     , @perfil 	
+                    , NULL
                     , @administrador 		
                     , 0	
-                    , @bloqueioLogin
+                    , NULL
                     , @observacoes 		
                     , @ativo 	
                     , @cadastro
